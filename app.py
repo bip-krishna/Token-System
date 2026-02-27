@@ -78,7 +78,7 @@ load_env_file_if_present()
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
+    password = db.Column(db.String(255))
     otp_hash = db.Column(db.String(128))
     otp_expires_at = db.Column(db.String(64))
     otp_attempts = db.Column(db.Integer, default=0)
@@ -87,12 +87,12 @@ class Student(db.Model):
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
+    password = db.Column(db.String(255))
 
 class ServerAdminCredential(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
 
 
 class Slot(db.Model):
