@@ -63,58 +63,115 @@
         </form>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-1 bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-          <h2 class="text-sm font-bold uppercase tracking-wider mb-3">Add Student</h2>
-          <form method="POST" action="/server-admin/students/add" class="space-y-3">
-            <div>
-              <label class="block text-xs font-semibold mb-1">Student Email</label>
-              <input name="email" type="email" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="student@nitc.ac.in" />
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
+            <h2 class="text-sm font-bold uppercase tracking-wider mb-3">Add Student</h2>
+            <form method="POST" action="/server-admin/students/add" class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold mb-1">Student Email</label>
+                <input name="email" type="email" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="student@nitc.ac.in" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">Password</label>
+                <input name="password" type="text" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="Set password" />
+              </div>
+              <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg">Add Student</button>
+            </form>
+          </div>
+
+          <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+            <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <h2 class="text-sm font-bold uppercase tracking-wider">Students in Database</h2>
+              <span class="text-xs text-slate-500 font-semibold">{{ students|length }} records</span>
             </div>
-            <div>
-              <label class="block text-xs font-semibold mb-1">Password</label>
-              <input name="password" type="text" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="Set password" />
+            {% if students %}
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+                    <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">ID</th>
+                    <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">Email</th>
+                    <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">Credential State</th>
+                    <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                  {% for student in students %}
+                  <tr>
+                    <td class="py-2 px-4 text-sm">{{ student.id }}</td>
+                    <td class="py-2 px-4 text-sm font-semibold">{{ student.email }}</td>
+                    <td class="py-2 px-4 text-sm text-slate-600 dark:text-slate-300">Stored securely</td>
+                    <td class="py-2 px-4 text-right">
+                      <form method="POST" action="/server-admin/students/remove" onsubmit="return confirm('Remove {{ student.email }}?');" class="inline">
+                        <input type="hidden" name="student_id" value="{{ student.id }}" />
+                        <button type="submit" class="px-3 py-1.5 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-bold">Remove</button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
-            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-lg">Add Student</button>
-          </form>
+            {% else %}
+            <div class="p-6 text-sm text-slate-500">No students found in database.</div>
+            {% endif %}
+          </div>
         </div>
 
-        <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
-          <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
-            <h2 class="text-sm font-bold uppercase tracking-wider">Students in Database</h2>
-            <span class="text-xs text-slate-500 font-semibold">{{ students|length }} records</span>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
+            <h2 class="text-sm font-bold uppercase tracking-wider mb-3">Add Admin</h2>
+            <form method="POST" action="/server-admin/admins/add" class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold mb-1">Admin Email</label>
+                <input name="email" type="email" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="admin@nitc.ac.in" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold mb-1">Password</label>
+                <input name="password" type="text" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm" placeholder="Set password" />
+              </div>
+              <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg">Add Admin</button>
+            </form>
           </div>
-          {% if students %}
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
-                  <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">ID</th>
-                  <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">Email</th>
-                  <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">Credential State</th>
-                  <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                {% for student in students %}
-                <tr>
-                  <td class="py-2 px-4 text-sm">{{ student.id }}</td>
-                  <td class="py-2 px-4 text-sm font-semibold">{{ student.email }}</td>
-                  <td class="py-2 px-4 text-sm text-slate-600 dark:text-slate-300">Stored securely</td>
-                  <td class="py-2 px-4 text-right">
-                    <form method="POST" action="/server-admin/students/remove" onsubmit="return confirm('Remove {{ student.email }}?');" class="inline">
-                      <input type="hidden" name="student_id" value="{{ student.id }}" />
-                      <button type="submit" class="px-3 py-1.5 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-bold">Remove</button>
-                    </form>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+
+          <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+            <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <h2 class="text-sm font-bold uppercase tracking-wider">Admins in Database</h2>
+              <span class="text-xs text-slate-500 font-semibold">{{ admins|length }} records</span>
+            </div>
+            {% if admins %}
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+                    <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">ID</th>
+                    <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">Email</th>
+                    <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500">Credential State</th>
+                    <th class="py-2 px-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                  {% for admin in admins %}
+                  <tr>
+                    <td class="py-2 px-4 text-sm">{{ admin.id }}</td>
+                    <td class="py-2 px-4 text-sm font-semibold">{{ admin.email }}</td>
+                    <td class="py-2 px-4 text-sm text-slate-600 dark:text-slate-300">Stored securely</td>
+                    <td class="py-2 px-4 text-right">
+                      <form method="POST" action="/server-admin/admins/remove" onsubmit="return confirm('Remove admin {{ admin.email }}?');" class="inline">
+                        <input type="hidden" name="admin_id" value="{{ admin.id }}" />
+                        <button type="submit" class="px-3 py-1.5 rounded bg-red-600 hover:bg-red-700 text-white text-xs font-bold">Remove</button>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% else %}
+            <div class="p-6 text-sm text-slate-500">No admins found in database.</div>
+            {% endif %}
           </div>
-          {% else %}
-          <div class="p-6 text-sm text-slate-500">No students found in database.</div>
-          {% endif %}
         </div>
       </div>
       {% endif %}
@@ -122,3 +179,4 @@
   </div>
 </body>
 </html>
+
