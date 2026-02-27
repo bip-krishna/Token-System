@@ -1,8 +1,12 @@
 import os
-from dotenv import load_dotenv
 from pathlib import Path
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
 env_path = Path(__file__).parent / ".env"
-load_dotenv(dotenv_path=env_path)
+if load_dotenv is not None:
+    load_dotenv(dotenv_path=env_path)
 import random
 import uuid
 import smtplib
@@ -13,37 +17,18 @@ from datetime import timedelta
 from email.message import EmailMessage
 from flask import Flask, request, jsonify, render_template, session, send_from_directory, abort, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
+from sqlalchemy import inspect, text
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
 # CONFIG
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-# import os
-
-# database_url = os.environ.get("postgresql://student_2sm2_user:Z77YWKFCFx04F8z7DuSXLgMIuzBUACC7@dpg-d6gudsk50q8c73aaca1g-a/student_2sm2")
-
-# if database_url:
-#     app.config['postgresql://student_2sm2_user:Z77YWKFCFx04F8z7DuSXLgMIuzBUACC7@dpg-d6gudsk50q8c73aaca1g-a/student_2sm2'] = database_url
-# else:
-#     app.config['postgresql://student_2sm2_user:Z77YWKFCFx04F8z7DuSXLgMIuzBUACC7@dpg-d6gudsk50q8c73aaca1g-a/student_2sm2'] = 'sqlite:///users.db'
-# app.config['SECRET_KEY'] = "secret"
-import os
-
-database_url = os.environ.get("DATABASE_URL")
-
-if database_url:
-    # Fix Render's postgres:// issue if needed
-    if database_url.startswith("postgres://"):
-        database_url = database_url.replace("postgres://", "postgresql://", 1)
-
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_url
-else:
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
-
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+database_url = os.getenv("DATABASE_URL", "sqlite:///users.db")
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SECRET_KEY'] = "secret"
 
 db = SQLAlchemy(app)
 UPLOAD_DIR = os.path.join(app.instance_path, "uploads")
@@ -78,7 +63,7 @@ load_env_file_if_present()
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(255))
+    password = db.Column(db.String(100))
     otp_hash = db.Column(db.String(128))
     otp_expires_at = db.Column(db.String(64))
     otp_attempts = db.Column(db.Integer, default=0)
@@ -87,12 +72,12 @@ class Student(db.Model):
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(255))
+    password = db.Column(db.String(100))
 
 class ServerAdminCredential(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
 
 
 class Slot(db.Model):
@@ -179,7 +164,8 @@ def send_otp_email(receiver_email, otp):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login(sender_email, sender_password)
         smtp.send_message(msg)
-
+print("EMAIL_ADDRESS:", os.getenv("EMAIL_ADDRESS"))
+print("EMAIL_PASSWORD:", os.getenv("EMAIL_PASSWORD"))
 
 def build_qr_payload(token_id, roll_no=None, slot_time=None):
     parts = [f"TOKEN:{token_id or '--'}"]
@@ -272,8 +258,8 @@ def generate_token_id():
 
 
 def ensure_tokenbooking_columns():
-    rows = db.session.execute(text("PRAGMA table_info(token_booking)")).fetchall()
-    existing = {row[1] for row in rows}
+    inspector = inspect(db.engine)
+    existing = {column["name"] for column in inspector.get_columns("token_booking")}
     required_columns = {
         "token_id": "TEXT",
         "class10_doc": "TEXT",
@@ -296,8 +282,8 @@ def ensure_tokenbooking_columns():
 
 
 def ensure_student_columns():
-    rows = db.session.execute(text("PRAGMA table_info(student)")).fetchall()
-    existing = {row[1] for row in rows}
+    inspector = inspect(db.engine)
+    existing = {column["name"] for column in inspector.get_columns("student")}
     required_columns = {
         "otp_hash": "TEXT",
         "otp_expires_at": "TEXT",
@@ -342,10 +328,12 @@ def get_server_admin_credential():
 def server_admin_page():
     authenticated = is_server_admin_authenticated()
     students = Student.query.order_by(Student.id.desc()).all() if authenticated else []
+    admins = Admin.query.order_by(Admin.id.desc()).all() if authenticated else []
     return render_template(
         "server-admin.html",
         authenticated=authenticated,
         students=students,
+        admins=admins,
         message=request.args.get("message", ""),
         error=request.args.get("error", ""),
     )
@@ -412,6 +400,45 @@ def server_admin_remove_student():
     db.session.delete(student)
     db.session.commit()
     return redirect(url_for("server_admin_page", message=f"Removed {removed_email} from database."))
+
+
+@app.route("/server-admin/admins/add", methods=["POST"])
+def server_admin_add_admin():
+    if not is_server_admin_authenticated():
+        return redirect(url_for("server_admin_page", error="Please login as server admin first."))
+
+    email = (request.form.get("email") or "").strip().lower()
+    password = (request.form.get("password") or "").strip()
+    if not email or not password:
+        return redirect(url_for("server_admin_page", error="Admin email and password are required."))
+
+    existing = Admin.query.filter_by(email=email).first()
+    if existing:
+        return redirect(url_for("server_admin_page", error=f"{email} already exists as admin."))
+
+    admin = Admin(email=email, password=generate_password_hash(password))
+    db.session.add(admin)
+    db.session.commit()
+    return redirect(url_for("server_admin_page", message=f"Added admin {email} to database."))
+
+
+@app.route("/server-admin/admins/remove", methods=["POST"])
+def server_admin_remove_admin():
+    if not is_server_admin_authenticated():
+        return redirect(url_for("server_admin_page", error="Please login as server admin first."))
+
+    admin_id = request.form.get("admin_id", type=int)
+    if not admin_id:
+        return redirect(url_for("server_admin_page", error="admin_id is required."))
+
+    admin = Admin.query.get(admin_id)
+    if not admin:
+        return redirect(url_for("server_admin_page", error="Admin not found."))
+
+    removed_email = admin.email
+    db.session.delete(admin)
+    db.session.commit()
+    return redirect(url_for("server_admin_page", message=f"Removed admin {removed_email} from database."))
 
 
 @app.route("/password/otp/request", methods=["POST"])
@@ -946,12 +973,9 @@ def login():
     # -------- ADMIN LOGIN -------- #
     if role == "admin":
         hall_role = (data.get("hallRole") or data.get("hall_role") or "").strip().lower()
-        user = Admin.query.filter_by(
-            email=email,
-            password=password
-        ).first()
+        user = Admin.query.filter_by(email=email).first()
 
-        if user:
+        if user and verify_user_password(user.password, password):
             session["admin_email"] = email
             session["admin_hall_role"] = hall_role
             redirect_page = "admin2.html" if hall_role == "chanakya" else "admin.html"
@@ -1046,8 +1070,8 @@ def submit_booking():
 
 with app.app_context():
     db.create_all()
-    # ensure_tokenbooking_columns()
-    # ensure_student_columns()
+    ensure_tokenbooking_columns()
+    ensure_student_columns()
     if not get_server_admin_credential():
         # Default server admin account seeded in DB (password hashed).
         db.session.add(
@@ -1078,4 +1102,4 @@ with app.app_context():
 # ---------------- RUN ---------------- #
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
