@@ -164,8 +164,7 @@ def send_otp_email(receiver_email, otp):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
         smtp.login(sender_email, sender_password)
         smtp.send_message(msg)
-print("EMAIL_ADDRESS:", os.getenv("EMAIL_ADDRESS"))
-print("EMAIL_PASSWORD:", os.getenv("EMAIL_PASSWORD"))
+
 
 def build_qr_payload(token_id, roll_no=None, slot_time=None):
     parts = [f"TOKEN:{token_id or '--'}"]
