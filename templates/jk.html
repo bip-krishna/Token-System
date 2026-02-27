@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Token Confirmation & Details | NITC</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        body { font-family: 'Lexend', sans-serif; }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+
+<div class="layout-container flex flex-col min-h-screen">
+
+<header class="flex items-center justify-between border-b bg-white px-6 py-4">
+    <h1 class="font-bold">NITC Admission Portal</h1>
+
+    <div>
+        <p id="studentName" class="font-bold">Name</p>
+        <p id="studentRoll" class="text-xs text-slate-500">Roll: --</p>
+    </div>
+</header>
+
+<main class="flex-1 max-w-5xl mx-auto w-full px-4 py-8">
+
+<div class="text-center mb-10">
+    <span class="material-symbols-outlined text-5xl text-emerald-500">check_circle</span>
+    <h2 class="text-3xl font-black mt-2">Token Booked Successfully!</h2>
+</div>
+
+<div class="bg-white p-8 rounded-xl shadow">
+
+<div class="flex flex-col md:flex-row gap-10 items-center">
+
+<!-- QR + Token -->
+<div>
+    <img id="qrImage" class="size-56 mx-auto" />
+    <p class="text-center mt-4 font-mono text-xl font-bold">
+        {{ booking.token }}
+    </p>
+</div>
+
+<!-- Details -->
+<div class="space-y-4">
+
+<p><b>Slot:</b> {{ booking.slot }}</p>
+<p><b>Venue:</b> Chanakya Hall</p>
+<p><b>Name:</b> <span id="studentNameCard"></span></p>
+<p><b>Branch:</b> <span id="studentBranch"></span></p>
+
+</div>
+
+</div>
+</div>
+
+</main>
+
+</div>
+
+<!-- Scripts -->
+<script src="{{ url_for('static', filename='site.js') }}"></script>
+
+<!-- QR library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+<script>
+
+const email = "{{ email }}";
+const tokenValue = "{{ booking.token }}";
+
+/* -------- QR GENERATION -------- */
+if (tokenValue && document.getElementById("qrImage")) {
+    QRCode.toDataURL(tokenValue, { width: 256, margin: 2 }, function (err, url) {
+        if (!err) document.getElementById("qrImage").src = url;
+    });
+}
+
+/* -------- USER INFO FROM EMAIL -------- */
+if (email) {
+
+    let base = email.split("@")[0];
+    let parts = base.split("_");
+
+    if (parts.length === 2) {
+
+        let name = parts[0];
+        let roll = parts[1];
+
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+        roll = roll.toUpperCase();
+
+        document.getElementById("studentName").innerText = name;
+        document.getElementById("studentRoll").innerText = "Roll: " + roll;
+        document.getElementById("studentNameCard").innerText = name;
+
+        let branch = "Engineering";
+        if (roll.includes("CS")) branch = "Computer Science";
+        if (roll.includes("EC")) branch = "Electronics";
+
+        document.getElementById("studentBranch").innerText = branch;
+    }
+}
+
+</script>
+
+</body>
+</html>

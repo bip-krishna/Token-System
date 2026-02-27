@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Late Reporting Claim - NITC Physical Reporting</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="styles/lateregistration.css" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "urgent": "#e11d48",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem("nitc-theme");
+      // const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      // const isDark = savedTheme ? savedTheme === "dark" : prefersDark;
+      // document.documentElement.classList.toggle("dark", isDark);
+      // document.documentElement.classList.toggle("light", !isDark);
+    })();
+  </script>
+</head>
+<body class="bg-mesh dark:bg-background-dark text-[#0d141b] dark:text-slate-50 min-h-screen flex flex-col" data-student-name="Arun Krishna" data-student-roll-no="B22CS001">
+<header class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-4 sm:px-8 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-[#e7edf3] dark:border-slate-800 sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined text-3xl">account_balance</span>
+</div>
+<div>
+<h1 class="text-xl font-extrabold tracking-tight">NITC Physical Reporting</h1>
+<p class="text-xs font-medium text-slate-500 uppercase tracking-widest">Late Reporting Management</p>
+</div>
+</div>
+<div class="flex items-center gap-4 sm:gap-6 self-start sm:self-auto">
+<div class="text-right">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Current Date</p>
+<p class="text-sm font-bold">20-08-2026</p>
+</div>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+<div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-green-500 text-sm">check_circle</span>
+<span class="text-xs font-bold">Secure Connection</span>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-5xl mx-auto w-full p-4 sm:p-8 flex flex-col items-center justify-center">
+<div class="w-full bg-urgent text-white rounded-2xl p-5 sm:p-8 mb-8 shadow-2xl shadow-rose-500/20 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-8 opacity-10">
+<span class="material-symbols-outlined text-9xl">schedule_send</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-white/20 px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest">Limited Opportunity</span>
+<span class="flex h-2 w-2 rounded-full bg-white animate-pulse"></span>
+</div>
+<h2 class="text-3xl sm:text-5xl font-extrabold mb-4">Exclusive Slot Available</h2>
+<p class="text-base sm:text-lg opacity-90 max-w-2xl font-medium">A dedicated late reporting window has been generated for your application. Claim it immediately to avoid administrative cancellation.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 w-full">
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl p-8">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+<div>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 block">Your Reporting Window</span>
+<div class="text-3xl font-black text-primary">11:00 AM - 12:00 PM</div>
+<p class="text-sm text-slate-500 mt-1">Thursday, Aug 20 | Desk 0 (Main Hall)</p>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-800 w-full md:w-auto">
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 block">Offer Expires In</span>
+<div class="text-3xl font-mono font-bold text-urgent tracking-tighter">08:42<span class="text-lg ml-1">sec</span></div>
+</div>
+</div>
+<div class="space-y-6 mb-8">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end">
+<span class="text-sm font-bold">Slot Optimization Status</span>
+<span class="text-xs font-bold text-slate-500">Current Capacity: <span class="text-slate-900 dark:text-white">42/60 units</span></span>
+</div>
+<div class="h-3 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[70%] rounded-full"></div>
+</div>
+<p class="text-[10px] text-slate-400 italic italic uppercase">System automatically reallocates unused slots every 5 minutes.</p>
+</div>
+</div>
+<button class="w-full bg-primary hover:bg-blue-600 text-white font-extrabold py-5 rounded-xl shadow-lg shadow-blue-500/30 transition-all active:scale-[0.98] flex items-center justify-center gap-3 text-xl">
+<span class="material-symbols-outlined">flash_on</span>
+                    Claim Slot Now
+                </button>
+<p class="text-center text-xs text-slate-400 mt-4 font-medium">By clicking, you confirm physical presence within NITC campus.</p>
+</div>
+</div>
+<div class="lg:col-span-5">
+<div class="bg-slate-900 dark:bg-slate-900/50 rounded-2xl p-8 text-white shadow-xl h-full flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-amber-400">verified_user</span>
+<h3 class="text-xl font-bold">Readiness Checklist</h3>
+</div>
+<p class="text-slate-400 text-sm mb-6">Have these documents ready in original format within the next hour:</p>
+<ul class="space-y-4 flex-1">
+<li class="flex gap-4 items-start">
+<div class="h-6 w-6 rounded-full border-2 border-primary flex items-center justify-center shrink-0 mt-0.5">
+<div class="h-2 w-2 rounded-full bg-primary"></div>
+</div>
+<div>
+<p class="font-bold text-sm">Rank Card &amp; Admission Letter</p>
+<p class="text-xs text-slate-500">Must be printed copies from JoSAA/CSAB portal.</p>
+</div>
+</li>
+<li class="flex gap-4 items-start">
+<div class="h-6 w-6 rounded-full border-2 border-primary flex items-center justify-center shrink-0 mt-0.5">
+<div class="h-2 w-2 rounded-full bg-primary"></div>
+</div>
+<div>
+<p class="font-bold text-sm">Academic Certificates</p>
+<p class="text-xs text-slate-500">10th &amp; 12th Marksheets (Originals only).</p>
+</div>
+</li>
+<li class="flex gap-4 items-start">
+<div class="h-6 w-6 rounded-full border-2 border-primary flex items-center justify-center shrink-0 mt-0.5">
+<div class="h-2 w-2 rounded-full bg-primary"></div>
+</div>
+<div>
+<p class="font-bold text-sm">Medical Certificate</p>
+<p class="text-xs text-slate-500">As per the Annexure-7 of JoSAA format.</p>
+</div>
+</li>
+<li class="flex gap-4 items-start">
+<div class="h-6 w-6 rounded-full border-2 border-slate-700 flex items-center justify-center shrink-0 mt-0.5">
+</div>
+<div>
+<p class="font-bold text-sm text-slate-400">Category/EWS Certificate</p>
+<p class="text-xs text-slate-500">If applicable for your specific seat.</p>
+</div>
+</li>
+</ul>
+<div class="mt-8 pt-6 border-t border-slate-800">
+<div class="bg-white/5 p-4 rounded-xl border border-white/10 flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-3xl">contact_support</span>
+<div>
+<p class="text-xs font-bold opacity-60 uppercase tracking-widest">Need Help?</p>
+<p class="text-sm font-bold">Visit Help Desk - Main Block</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6">
+<div class="max-w-5xl mx-auto px-4 sm:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-sm">lock</span>
+<span class="text-xs font-medium text-slate-500">Encrypted Student Portal - NIT Calicut</span>
+</div>
+<div class="flex gap-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Reporting Rules</a>
+<a class="hover:text-primary transition-colors" href="#">Helpdesk</a>
+</div>
+</div>
+</footer>
+
+  <script>
+    window.APP_CONFIG = {
+      enableBackend: false,
+      backendBaseUrl: ""
+    };
+  </script>
+  <script src="/static/site.js"></script>
+</body></html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Student Token Booking Portal | NITC</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .step-active {
+            border-left: 4px solid #137fec;
+        }
+    </style>
+    <script>
+            (function () {
+                const savedTheme = localStorage.getItem("nitc-theme");
+                // const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                // const isDark = savedTheme ? savedTheme === "dark" : prefersDark;
+                // document.documentElement.classList.toggle("dark", isDark);
+                // document.documentElement.classList.toggle("light", !isDark);
+            })();
+    </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen"
+    data-student-name="Arun Krishna" data-student-roll-no="B22CS001">
+    <div class="layout-container flex flex-col min-h-screen">
+        <!-- Top Navigation Bar -->
+        <header
+            class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-6 py-4 lg:px-20 sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-primary/10 rounded-lg text-primary">
+                    <span class="material-symbols-outlined text-2xl">school</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight tracking-tight">NITC Admission Portal</h1>
+                    <p class="text-xs text-slate-500 font-medium">Academic Session 2024-25</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Schedule</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Guidelines</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Contact</a>
+                </nav>
+                <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p id="studentName" class="text-sm font-bold">Name</p>
+                        <p id="studentRoll" class="text-[10px] text-slate-500">Roll: --</p>
+                    </div>
+
+                    <div
+                        class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 overflow-hidden">
+                        <img alt="Profile" class="w-full h-full object-cover"
+                            data-alt="Student profile headshot portrait"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SxfTjZOVUNdbMr4heOy4VGSbXFfWG4wzZTFQA5fauLv8D0h3Sk3LxbSCbumqjHTeNm9cTn3l72tOAraC1jvywJ_BJj49-IWJ4hq8Q6rU2lFoVhyHkylh2LITDl14eFUSSJo6ME9aZnoKIwpWXSMMw8PEZ2_HshPTMIOWu-p4e0_JhtpJpr0RSrSR8v3Ca4QDxCwDQxkSy-9viQD_c4K_TSkDyPmfBSGraU1qxm7j6ZrLs5hK12R_EY69e5eocHXbJm4Ozay8GwZP" />
+                    </div>
+                    <div data-settings-mount></div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 max-w-[1280px] mx-auto w-full px-4 py-8 lg:px-20">
+            <!-- Hero Section -->
+            <div class="mb-10">
+                <h2 class="text-4xl font-black tracking-tight mb-2">Student Token Booking</h2>
+                <div class="flex items-center gap-2 text-primary font-medium">
+                    <span class="material-symbols-outlined text-sm">event</span>
+                    <span>Reporting Window: August 20 — August 24, 2024</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left Column: Schedule & Timeline -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div
+                        class="bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">calendar_month</span>
+                            Branch-wise Reporting Schedule
+                        </h3>
+                        <div class="relative space-y-1">
+                            <!-- Timeline Entry 1 -->
+                            <div class="grid grid-cols-[48px_1fr] gap-4 group">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 group-hover:bg-primary/10 group-hover:text-primary transition-colors border border-slate-200 dark:border-slate-700">
+                                        <span class="text-xs font-bold">20</span>
+                                    </div>
+                                    <div class="w-0.5 h-full bg-slate-100 dark:bg-slate-800 my-1"></div>
+                                </div>
+                                <div class="pb-8">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="font-bold text-slate-900 dark:text-slate-100">Aug 20: CSE &amp; ECE
+                                        </p>
+                                        <span
+                                            class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] rounded uppercase font-bold text-slate-500 tracking-wider">Completed</span>
+                                    </div>
+                                    <p class="text-sm text-slate-500">Computer Science and Electronics &amp;
+                                        Communication branches.</p>
+                                </div>
+                            </div>
+                            <!-- Timeline Entry 2 (Current Focus) -->
+                            <div class="grid grid-cols-[48px_1fr] gap-4 group">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="size-10 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/30 ring-4 ring-primary/10">
+                                        <span class="text-xs font-bold">21</span>
+                                    </div>
+                                    <div class="w-0.5 h-full bg-slate-100 dark:bg-slate-800 my-1"></div>
+                                </div>
+                                <div class="pb-8">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="font-bold text-primary">Aug 21: ME &amp; CE (Tomorrow)</p>
+                                        <span
+                                            class="px-2 py-0.5 bg-primary/10 text-[10px] rounded uppercase font-bold text-primary tracking-wider">Upcoming</span>
+                                    </div>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400">Mechanical Engineering and
+                                        Civil Engineering branches.</p>
+                                    <div
+                                        class="mt-3 p-3 bg-primary/5 rounded-lg border border-primary/10 inline-flex items-center gap-2">
+                                        <span
+                                            class="material-symbols-outlined text-primary text-sm">verified_user</span>
+                                        <span class="text-xs font-semibold text-primary">Your Branch: CSE (Check Late
+                                            Reporting)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Timeline Entry 3 -->
+                            <div class="grid grid-cols-[48px_1fr] gap-4 group">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 border border-slate-200 dark:border-slate-700">
+                                        <span class="text-xs font-bold">22</span>
+                                    </div>
+                                    <div class="w-0.5 h-full bg-slate-100 dark:bg-slate-800 my-1"></div>
+                                </div>
+                                <div class="pb-8">
+                                    <p class="font-bold text-slate-900 dark:text-slate-100">Aug 22: EE &amp; CH</p>
+                                    <p class="text-sm text-slate-500">Electrical and Chemical Engineering branches.</p>
+                                </div>
+                            </div>
+                            <!-- Timeline Entry 4 -->
+                            <div class="grid grid-cols-[48px_1fr] gap-4 group">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500 border border-slate-200 dark:border-slate-700">
+                                        <span class="text-xs font-bold">23</span>
+                                    </div>
+                                    <div class="w-0.5 h-full bg-slate-100 dark:bg-slate-800 my-1"></div>
+                                </div>
+                                <div class="pb-8">
+                                    <p class="font-bold text-slate-900 dark:text-slate-100">Aug 23: All Other Branches
+                                    </p>
+                                    <p class="text-sm text-slate-500">Architecture, Physics, Chemistry, and remaining
+                                        streams.</p>
+                                </div>
+                            </div>
+                            <!-- Timeline Entry 5 -->
+                            <div class="grid grid-cols-[48px_1fr] gap-4 group">
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="size-10 rounded-full bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center text-amber-600 border border-amber-200 dark:border-amber-800">
+                                        <span class="material-symbols-outlined text-base">warning</span>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <p class="font-bold text-slate-900 dark:text-slate-100">Aug 24: Late Reporting</p>
+                                    <p class="text-sm text-slate-500 mb-2">Final window for late arrivals with verified
+                                        justification.</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Guidelines -->
+                    <div class="bg-primary/5 p-6 rounded-xl border border-primary/10">
+                        <h4 class="font-bold mb-3">General Instructions</h4>
+                        <ul class="text-sm space-y-2 text-slate-600 dark:text-slate-400">
+                            <li class="flex gap-2"><span
+                                    class="material-symbols-outlined text-primary text-xs mt-1">check_circle</span>
+                                Tokens are mandatory for entry into the reporting hall.</li>
+                            <li class="flex gap-2"><span
+                                    class="material-symbols-outlined text-primary text-xs mt-1">check_circle</span>
+                                Tokens are issued based on branch eligibility and session capacity.</li>
+                            <li class="flex gap-2"><span
+                                    class="material-symbols-outlined text-primary text-xs mt-1">check_circle</span>
+                                Booking opens strictly at 5:00 PM the day prior.</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Right Column: Booking Engine -->
+                <div class="lg:col-span-5 space-y-6">
+                    <!-- Token Registration Status Card -->
+                    <div
+                        class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                        <div class="bg-slate-900 dark:bg-black p-4 text-white flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-amber-400">lock</span>
+                                <span class="text-xs font-bold tracking-widest uppercase">System Locked</span>
+                            </div>
+                            <div class="text-xs font-medium text-slate-400">Next Release: 5:00 PM IST</div>
+                        </div>
+                        <div class="p-8">
+                            <div class="mb-6 text-center">
+                                <h3 class="text-2xl font-bold mb-2">Token Registration</h3>
+                                <p class="text-slate-500 text-sm">Session for Aug 21 (ME/CE)</p>
+                            </div>
+                            <!-- Notification: Slot Availability (Formula 5x+15y < 45) -->
+                            <div
+                                class="mb-8 p-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-100 dark:border-emerald-900 flex items-start gap-3">
+                                <div class="text-emerald-500 mt-1">
+                                    <span class="material-symbols-outlined">analytics</span>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter">
+                                        Late Reporting Capacity</p>
+                                    <p class="text-sm font-semibold text-emerald-800 dark:text-emerald-300">Slots
+                                        Available: 3/15</p>
+                                    <p class="text-[10px] text-emerald-600 dark:text-emerald-500 mt-1 italic">
+                                        Calculated: 5(3) + 15(0) = 15 &lt; 45 (Normal Load)</p>
+                                </div>
+                            </div>
+                            <!-- Countdown -->
+                            <div class="flex justify-between gap-4 mb-8">
+                                <div
+                                    class="flex-1 text-center p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700">
+                                    <div class="text-xl font-bold text-primary">05</div>
+                                    <div class="text-[10px] uppercase font-bold text-slate-400">Hours</div>
+                                </div>
+                                <div
+                                    class="flex-1 text-center p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700">
+                                    <div class="text-xl font-bold text-primary">32</div>
+                                    <div class="text-[10px] uppercase font-bold text-slate-400">Mins</div>
+                                </div>
+                                <div
+                                    class="flex-1 text-center p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700">
+                                    <div class="text-xl font-bold text-primary">15</div>
+                                    <div class="text-[10px] uppercase font-bold text-slate-400">Secs</div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <button
+                                    class="w-full bg-slate-200 dark:bg-slate-800 text-slate-500 font-bold py-4 rounded-lg flex items-center justify-center gap-2 cursor-not-allowed transition-all"
+                                    disabled="">
+                                    <span class="material-symbols-outlined">schedule</span>
+                                    Wait for 5:00 PM
+                                </button>
+                                <p class="text-[11px] text-center text-slate-400">Booking will be active for exactly 4
+                                    hours or until tokens last.</p>
+                            </div>
+                        </div>
+                        <div class="px-8 pb-8">
+                            <div class="h-[1px] bg-slate-100 dark:bg-slate-800 mb-6"></div>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="size-12 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700">
+                                    <span class="material-symbols-outlined text-slate-400">info</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">Eligibility Check
+                                    </p>
+                                    <p class="text-[11px] text-slate-500">Only ME &amp; CE students can book tomorrow.
+                                        Others must wait for their assigned day or use Late Reporting slots.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Token Placeholder / Previous Tokens -->
+                    <div
+                        class="bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center text-center">
+                        <div
+                            class="size-16 rounded-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center mb-4">
+                            <span class="material-symbols-outlined text-slate-300 text-3xl">confirmation_number</span>
+                        </div>
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-widest">No Active Token</p>
+                        <p class="text-xs text-slate-500 mt-1 max-w-[200px]">Once you book, your QR-enabled token will
+                            appear here.</p>
+                    </div>
+                    <!-- Visual Guide Image -->
+                    <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="relative h-40 w-full">
+                            <img alt="University Library" class="w-full h-full object-cover"
+                                data-alt="University library study space background"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIRQI_czQrMNyjzuKy_slq2VRKEHrl_hPuDgXJUXhglHroBGmEEyOaGYKj1XIIFX4-kfEguO08D2bnW-OZPsq_vIVozkgnx_mr8G_4eiadNiVOMIBh8XR6BiBreop33o_dCMm0hF2Nqckcfhv_Xc_PKXUDQ9Rr6VO1RN8NEPFimCZcOPWFZYH9QwHexSzZVF4ydlejp9hhPHXunzbNOgAezjwHxPhGdzO9jftizjGuXrtmZQEaHk4aM1zEGNDDdaM_4lC8p8HMLPPn" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4">
+                                <p class="text-white text-xs font-bold uppercase tracking-widest mb-1">Venue Information
+                                </p>
+                                <p class="text-white/80 text-[11px] leading-tight">Chanakya Hall, First
+                                    Floor,<br />Admin Block B</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Footer -->
+        <footer
+            class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 py-8 px-6 lg:px-20 mt-12">
+            <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex flex-col items-center md:items-start">
+                    <p class="text-sm font-bold opacity-80">NIT Calicut Admissions Office</p>
+                    <p class="text-xs text-slate-500">©️ 2024 National Institute of Technology Calicut. All Rights
+                        Reserved.</p>
+                </div>
+                <div class="flex gap-8">
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium" href="#">Terms of
+                        Service</a>
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium" href="#">Privacy
+                        Policy</a>
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium" href="#">Help
+                        Desk</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Powered By</span>
+                    <div class="px-2 py-1 bg-slate-900 rounded text-[10px] font-black text-white">IMS NITC</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        window.APP_CONFIG = {
+            enableBackend: false,
+            backendBaseUrl: "",
+        };
+
+    </script>
+    <script src="site.js"></script>
+    <script>
+
+        const email = "{{ email }}";
+
+        if (email) {
+
+            // Remove domain
+            let base = email.split("@")[0];
+
+            // Split name & roll
+            let parts = base.split("_");
+
+            if (parts.length === 2) {
+
+                let name = parts[0];
+                let roll = parts[1];
+
+                // Format
+                name = name.charAt(0).toUpperCase() + name.slice(1);
+                roll = roll.toUpperCase();
+
+                // Set navbar
+                document.getElementById("studentName").innerText = name;
+                document.getElementById("studentRoll").innerText = "Roll: " + roll;
+
+            }
+
+        }
+
+    </script>
+
+
+
+</body>
+
+</html>

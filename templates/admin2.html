@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin 2: Chanakya Hall Dashboard | NITC Admissions</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#0d59f2",
+          "background-light": "#f5f6f8",
+          "background-dark": "#101622",
+        },
+        fontFamily: {
+          "display": ["Lexend", "sans-serif"]
+        },
+        borderRadius: {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+      },
+    },
+  }
+</script>
+<style>
+  body { font-family: 'Lexend', sans-serif; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+{% set ab = active_booking %}
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-8 flex items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">account_balance</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">NITC Admission Portal</h2>
+</div>
+<label class="flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-500 flex border-none bg-slate-100 dark:bg-slate-800 items-center justify-center pl-4 rounded-l-lg">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-slate-100 dark:bg-slate-800 placeholder:text-slate-500 px-4 rounded-l-none pl-2 text-sm font-normal" placeholder="Search roll no or token..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="flex items-center gap-6">
+<a class="text-primary text-sm font-semibold border-b-2 border-primary pb-1" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Student Queue</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="#">Reports</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-[20px]">help</span>
+</button>
+</div>
+<div data-settings-mount></div>
+</div>
+</header>
+
+<main class="max-w-[1440px] mx-auto px-10 py-8 flex gap-8">
+<aside class="w-64 flex flex-col gap-6 shrink-0">
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">domain</span>
+<div>
+<h1 class="text-slate-900 dark:text-white text-base font-bold">Chanakya Hall</h1>
+<p class="text-slate-500 text-xs font-normal">Reporting Station Admin 2</p>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<button class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[20px]">person_check</span>
+<span class="text-sm font-semibold">Current Active</span>
+</button>
+<button class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-[20px]">view_list</span>
+<span class="text-sm font-medium">Queue List ({{ chanakya_bookings|length }})</span>
+</button>
+</div>
+<div class="mt-6">
+<a href="admin.html" class="w-full flex items-center justify-center gap-2 rounded-lg py-2.5 border-2 border-primary/20 text-primary text-sm font-bold hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">swap_horiz</span>
+Switch Station
+</a>
+</div>
+</div>
+</aside>
+
+<section class="flex-1 min-w-0">
+<div class="flex flex-wrap items-center gap-2 mb-4 text-sm">
+<span class="text-slate-500">Dashboard</span>
+<span class="material-symbols-outlined text-slate-400 text-[16px]">chevron_right</span>
+<span class="text-slate-500">Queue</span>
+<span class="material-symbols-outlined text-slate-400 text-[16px]">chevron_right</span>
+<span class="text-slate-900 dark:text-white font-medium">Reporting: {{ ab.student_name if ab else 'No Student Yet' }}</span>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-md overflow-hidden">
+<div class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start gap-6">
+<div class="flex gap-6">
+<div class="relative">
+<div class="h-32 w-32 rounded-xl bg-slate-200 dark:bg-slate-800 overflow-hidden border-4 border-white dark:border-slate-800 shadow-sm">
+<img class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi7joy2ynAAqqr3C1BtYQh0_aHy-OWlQXRz70ao_5M68HClTkEatw6xrPO-c6ba9SWjrbcz6nkEPvwG3xF0V5xoNwTqugsttxh4LupvHHMvBWoGlBczqN5TC5TbJZ-W5Io-8EU98VyDmHuJeusnkxRDe4GzSY0pYe-p8j-XOA28PHgFs1vq2rwy8vfXVsoIEWz6vY9_kGeF5gphntI4gr9WNmXZyAcrSkHShuWzi9wl5WpIl1_00C5q2FunqiV4ZKyDISujMmYlRs"/>
+</div>
+</div>
+<div class="space-y-1">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">{{ ab.student_name if ab else 'No Student Selected' }}</h2>
+<div class="flex flex-col gap-1.5">
+<p class="text-slate-600 dark:text-slate-400 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">badge</span>
+Roll No: <span class="font-semibold text-slate-800 dark:text-slate-200">{{ ab.roll_no if ab else '--' }}</span>
+</p>
+<p class="text-slate-600 dark:text-slate-400 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">mail</span>
+{{ ab.student_email if ab else '--' }}
+</p>
+<div class="flex items-center gap-4 mt-1">
+<span class="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">Token: {{ ab.token_id if ab else '--' }}</span>
+<span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold px-2 py-1 rounded">{{ ab.queue_type if ab else '--' }}</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-2 gap-0">
+<div class="p-8 border-r border-slate-100 dark:border-slate-800">
+<h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">history_edu</span>
+Verification History
+</h3>
+<div class="space-y-6 relative">
+<div class="absolute left-[11px] top-2 bottom-2 w-0.5 bg-slate-100 dark:bg-slate-800"></div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 h-6 w-6 rounded-full bg-green-500 border-4 border-white dark:border-slate-900 flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-white font-bold">check</span>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Physical Document Verification</p>
+<p class="text-xs text-slate-500 mb-2">Admin 1 Completed</p>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
+<p class="text-xs text-slate-600 dark:text-slate-400 italic">{{ ab.admin1_notes if ab and ab.admin1_notes else 'No notes shared by Admin 1.' }}</p>
+</div>
+</div>
+</div>
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 h-6 w-6 rounded-full bg-primary border-4 border-white dark:border-slate-900 flex items-center justify-center">
+<div class="h-1.5 w-1.5 rounded-full bg-white animate-pulse"></div>
+</div>
+<div>
+<p class="text-sm font-bold text-primary">Final Approval Required</p>
+<p class="text-xs text-slate-500 uppercase font-medium tracking-tighter">Current Stage: Chanakya Hall Admin 2</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="p-8 bg-slate-50 dark:bg-slate-900/50">
+<h3 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">description</span>
+Uploaded Documents
+</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+<div><p class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Class X Certificate</p></div>
+{% if ab and ab.class10_doc_url %}<a target="_blank" href="{{ ab.class10_doc_url }}" class="text-primary text-xs font-bold">View</a>{% else %}<span class="text-xs text-slate-400">Not uploaded</span>{% endif %}
+</div>
+<div class="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+<div><p class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Class XII Certificate</p></div>
+{% if ab and ab.class12_doc_url %}<a target="_blank" href="{{ ab.class12_doc_url }}" class="text-primary text-xs font-bold">View</a>{% else %}<span class="text-xs text-slate-400">Not uploaded</span>{% endif %}
+</div>
+<div class="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+<div><p class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Category Certificate</p></div>
+{% if ab and ab.category_doc_url %}<a target="_blank" href="{{ ab.category_doc_url }}" class="text-primary text-xs font-bold">View</a>{% else %}<span class="text-xs text-slate-400">Not uploaded</span>{% endif %}
+</div>
+<div class="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+<div><p class="text-xs font-bold text-slate-800 dark:text-white leading-tight">Fee Receipt</p></div>
+{% if ab and ab.paid_receipt_doc_url %}<a target="_blank" href="{{ ab.paid_receipt_doc_url }}" class="text-primary text-xs font-bold">View</a>{% else %}<span class="text-xs text-slate-400">Not uploaded</span>{% endif %}
+</div>
+</div>
+<div class="mt-6">
+<label class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2 block uppercase">Admin 1 Notes (Transferred)</label>
+<textarea readonly class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-3 text-sm resize-none" rows="3">{{ ab.admin1_notes if ab and ab.admin1_notes else 'No notes provided by Admin 1' }}</textarea>
+</div>
+</div>
+</div>
+
+<div class="bg-white dark:bg-slate-900 p-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4">
+<div class="flex gap-4">
+<button id="reject-profile-btn" data-booking-id="{{ ab.id if ab else '' }}" class="flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-sm transition-colors shadow-lg shadow-red-500/20">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+Reject Profile
+</button>
+<button id="late-reporting-btn" data-booking-id="{{ ab.id if ab else '' }}" class="flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-bold text-sm transition-colors shadow-lg shadow-amber-500/20 {% if not ab %}opacity-50 cursor-not-allowed{% endif %}" {% if not ab %}disabled{% endif %}>
+<span class="material-symbols-outlined text-[20px]">watch_later</span>
+Send to Late Reporting
+</button>
+</div>
+{% if ab and not ab.final_registration_completed %}
+<button id="complete-final-btn" data-booking-id="{{ ab.id if ab else '' }}" class="flex items-center gap-2 px-10 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-base transition-all shadow-lg shadow-emerald-500/20 transform hover:-translate-y-0.5 {% if not ab %}opacity-50 cursor-not-allowed{% endif %}" {% if not ab %}disabled{% endif %}>
+<span class="material-symbols-outlined">how_to_reg</span>
+Complete Final Registration
+</button>
+{% elif ab and ab.final_registration_completed %}
+<div class="flex items-center gap-2 px-4 py-3 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-sm font-semibold">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+Registration Completed
+</div>
+{% else %}
+<div class="flex items-center gap-2 px-4 py-3 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 text-sm font-semibold">
+<span class="material-symbols-outlined text-[20px]">info</span>
+No active student selected
+</div>
+{% endif %}
+</div>
+</div>
+</section>
+
+<aside class="w-80 flex flex-col gap-6 shrink-0">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">Next in Queue</h3>
+<span class="text-[10px] font-bold bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-slate-500">{{ chanakya_bookings|length }} WAITING</span>
+</div>
+<div class="space-y-3">
+{% if chanakya_bookings %}
+{% for booking in chanakya_bookings %}
+<a href="?booking={{ booking.id }}" class="flex items-center gap-3 group cursor-pointer {% if ab and booking.id != ab.id %}opacity-70{% endif %}">
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-800 flex-shrink-0 flex items-center justify-center text-sm font-bold">{{ booking.student_name[0]|upper }}</div>
+<div class="min-w-0">
+<p class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ booking.student_name }}</p>
+<p class="text-[10px] text-slate-500 truncate">{{ booking.roll_no }} • {{ booking.slot_time }}</p>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-[16px] ml-auto group-hover:text-primary">arrow_forward_ios</span>
+</a>
+{% endfor %}
+{% else %}
+<p class="text-xs text-slate-500">No students have been sent to Chanakya yet.</p>
+{% endif %}
+</div>
+</div>
+</aside>
+</main>
+<script>
+  window.APP_CONFIG = {
+    enableBackend: false,
+    backendBaseUrl: ""
+  };
+</script>
+<script src="{{ url_for('static', filename='site.js') }}"></script>
+<script>
+  (function () {
+    const rejectButton = document.getElementById("reject-profile-btn");
+    const lateReportingButton = document.getElementById("late-reporting-btn");
+    const completeButton = document.getElementById("complete-final-btn");
+    if (!rejectButton && !lateReportingButton && !completeButton) return;
+
+    if (rejectButton) {
+      rejectButton.addEventListener("click", async () => {
+        const bookingId = rejectButton.dataset.bookingId;
+        if (!bookingId) {
+          alert("No active student selected.");
+          return;
+        }
+        const res = await fetch("/reject-booking", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ booking_id: bookingId })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert(data.message || "Unable to reject profile.");
+          return;
+        }
+        alert("Profile rejected and removed.");
+        window.location.href = "/admin2.html";
+      });
+    }
+
+    if (lateReportingButton) {
+      lateReportingButton.addEventListener("click", async () => {
+        const bookingId = lateReportingButton.dataset.bookingId;
+        if (!bookingId) {
+          alert("No active student selected.");
+          return;
+        }
+
+        const reason = window.prompt("Enter reason for moving this student to Late Reporting Pool:");
+        if (reason === null) {
+          return;
+        }
+        const trimmedReason = reason.trim();
+        if (!trimmedReason) {
+          alert("Reason is required.");
+          return;
+        }
+
+        const res = await fetch("/move-to-late-reporting", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ booking_id: bookingId, reason: trimmedReason })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert(data.message || "Unable to move to late reporting pool.");
+          return;
+        }
+        alert("Student moved to late reporting pool.");
+        window.location.href = "/admin2.html";
+      });
+    }
+
+    if (completeButton) {
+      completeButton.addEventListener("click", async () => {
+        const bookingId = completeButton.dataset.bookingId;
+        if (!bookingId) {
+          alert("No active student selected.");
+          return;
+        }
+        const res = await fetch("/complete-final-registration", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ booking_id: bookingId })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          alert(data.message || "Unable to complete final registration.");
+          return;
+        }
+        if (data.print_url) {
+          window.open(data.print_url, "_blank", "noopener");
+        }
+        alert("Final registration completed.");
+        window.location.href = "/admin2.html";
+      });
+    }
+  })();
+</script>
+</body></html>

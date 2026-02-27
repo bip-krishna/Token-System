@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<script>
+    (function () {
+        const savedTheme = localStorage.getItem("nitc-theme");
+
+        if (savedTheme === "dark") {
+            document.documentElement.classList.add("dark");
+            document.documentElement.classList.remove("light");
+        } else {
+            document.documentElement.classList.add("light");
+            document.documentElement.classList.remove("dark");
+        }
+    })();
+</script>
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Token Booking Workflow | NITC</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+
+        .token-step.active {
+            border-color: #137fec;
+            background: rgba(19, 127, 236, 0.06);
+        }
+
+        .slot-card.selected {
+            border-color: #137fec;
+            background: rgba(19, 127, 236, 0.08);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen"
+    data-student-name="" data-student-roll-no="">
+    <div class="layout-container flex flex-col min-h-screen">
+        <header
+            class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-6 py-4 lg:px-20 sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-primary/10 rounded-lg text-primary">
+                    <span class="material-symbols-outlined text-2xl">school</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight tracking-tight">NITC Admission Portal</h1>
+                    <p class="text-xs text-slate-500 font-medium">Academic Session {{ academic_session_label }}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Schedule</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Guidelines</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Contact</a>
+                </nav>
+                <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p id="studentName" class="text-sm font-bold">Name</p>
+                        <p id="studentRoll" class="text-[10px] text-slate-500">Roll: --</p>
+                    </div>
+                    <div
+                        class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 overflow-hidden">
+                        <img alt="Profile" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SxfTjZOVUNdbMr4heOy4VGSbXFfWG4wzZTFQA5fauLv8D0h3Sk3LxbSCbumqjHTeNm9cTn3l72tOAraC1jvywJ_BJj49-IWJ4hq8Q6rU2lFoVhyHkylh2LITDl14eFUSSJo6ME9aZnoKIwpWXSMMw8PEZ2_HshPTMIOWu-p4e0_JhtpJpr0RSrSR8v3Ca4QDxCwDQxkSy-9viQD_c4K_TSkDyPmfBSGraU1qxm7j6ZrLs5hK12R_EY69e5eocHXbJm4Ozay8GwZP" />
+                    </div>
+                    <div data-settings-mount></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 max-w-[1280px] mx-auto w-full px-4 py-8 lg:px-20">
+            <div class="mb-10">
+                <h2 class="text-4xl font-black tracking-tight mb-2">Token Booking machine</h2>
+                <div class="flex items-center gap-2 text-primary font-medium">
+                    <span class="material-symbols-outlined text-sm"></span>
+                    <span>{{ reporting_window }}</span>
+                </div>
+                {% if existing_booking %}
+                <div class="mt-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-amber-800 text-sm">
+                    You already booked slot <strong>{{ existing_booking.slot_time }}</strong> with token <strong>{{ existing_booking.token_id }}</strong>. Re-booking is not allowed.
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-6">
+                    <div
+                        class="bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-lg font-bold">Progress Tracker</h3>
+                            <span id="progressText"
+                                class="text-xs font-bold text-slate-500 uppercase tracking-widest">0% Complete</span>
+                        </div>
+                        <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                            <div id="progressBar" class="h-full bg-primary w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+
+                    <section
+                        class="token-step active bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+                        data-step="1">
+                        <h3 class="text-lg font-bold mb-4">1. Fee Status</h3>
+                        <div class="space-y-4">
+                            <div class="flex gap-8">
+                                <label class="flex items-center gap-2 text-sm"><input type="radio" name="fee"
+                                        value="yes" class="text-primary" /> Fee Paid</label>
+                                <label class="flex items-center gap-2 text-sm"><input type="radio" name="fee" value="no"
+                                        class="text-primary" /> Not Paid</label>
+                            </div>
+                            <div id="paidReceiptBox" class="hidden">
+                                <label class="text-sm font-medium block mb-2">Upload Fee Receipt</label>
+                                <input id="paidReceiptUpload" type="file"
+                                    class="block w-full text-sm border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" />
+                            </div>
+                            <div id="unpaidPaymentModes" class="hidden">
+                                <label class="text-sm font-medium block mb-2">If Not Paid, Select Payment Mode</label>
+                                <div class="flex flex-col gap-2 text-sm">
+                                    <label class="flex items-center gap-2">
+                                        <input type="radio" name="unpaidMode" value="on-spot" class="text-primary" />
+                                        On Spot Payment
+                                    </label>
+                                    <label class="flex items-center gap-2">
+                                        <input type="radio" name="unpaidMode" value="education-loan"
+                                            class="text-primary" />
+                                        Education Loan
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="documentSection"
+                        class="token-step bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+                        data-step="2">
+                        <h3 class="text-lg font-bold mb-4">2. Document Uploads</h3>
+                        <p id="documentHint" class="text-xs text-slate-500 mb-3">Class 10 and Class 12 documents are
+                            mandatory. Category certificate is optional.</p>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-medium block mb-1">Class 10 Certificate</label>
+                                <input id="docClass10" type="file"
+                                    class="document-input block w-full text-sm border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" />
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium block mb-1">Class 12 Certificate</label>
+                                <input id="docClass12" type="file"
+                                    class="document-input block w-full text-sm border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" />
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium block mb-1">Category Certificate (Optional)</label>
+                                <input id="docCategory" type="file"
+                                    class="document-input block w-full text-sm border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section
+                        class="token-step bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+                        data-step="3">
+                        <h3 class="text-lg font-bold mb-4">3. Slot Selection</h3>
+                        <div id="slotGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3"></div>
+                    </section>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div
+                        class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xl">
+                        <div class="bg-slate-900 dark:bg-black p-4 text-white flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-amber-400">assignment</span>
+                                <span class="text-xs font-bold tracking-widest uppercase">Booking Summary</span>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-slate-500">Fee Status</span>
+                                <span id="feeStatus" class="font-semibold">Pending</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-slate-500">Payment Mode</span>
+                                <span id="paymentModeStatus" class="font-semibold">NA</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-slate-500">Fee Receipt</span>
+                                <span id="receiptStatus" class="font-semibold">NA</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-slate-500">Mandatory Documents</span>
+                                <span id="documentsStatus" class="font-semibold">Pending</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-slate-500">Selected Slot</span>
+                                <span id="slotStatus" class="font-semibold">Not Selected</span>
+                            </div>
+                            <div class="h-[1px] bg-slate-100 dark:bg-slate-800"></div>
+                            <button id="submitBooking" type="button"
+                                class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-all">
+                                <span class="material-symbols-outlined">done_all</span>
+                                Submit Booking
+                            </button>
+                            <p class="text-[11px] text-center text-slate-500">Token will be generated only after all
+                                mandatory fields are complete.</p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </main>
+
+        <footer
+            class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 py-8 px-6 lg:px-20 mt-12">
+            <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex flex-col items-center md:items-start">
+                    <p class="text-sm font-bold opacity-80">NIT Calicut Admissions Office</p>
+                    <p class="text-xs text-slate-500">©️ {{ current_year }} National Institute of Technology Calicut. All Rights
+                        Reserved.</p>
+                </div>
+                <div class="flex gap-8">
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium"
+                        href="#">Terms</a>
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium"
+                        href="#">Privacy</a>
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium" href="#">Help
+                        Desk</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Powered By</span>
+                    <div class="px-2 py-1 bg-slate-900 rounded text-[10px] font-black text-white">IMS NITC</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        window.APP_CONFIG = {
+            enableBackend: false,
+            backendBaseUrl: "",
+        };
+    </script>
+    <script>
+        (function () {
+            const rawJinjaPath = "{{ url_for('static', filename='site.js') }}";
+            const looksUnrendered = rawJinjaPath.includes("{{") || rawJinjaPath.includes("}}");
+            const candidates = looksUnrendered
+                ? ["/static/site.js", "../static/site.js"]
+                : [rawJinjaPath];
+
+            let index = 0;
+            function loadNext() {
+                if (index >= candidates.length) return;
+                const s = document.createElement("script");
+                s.src = candidates[index++];
+                s.defer = false;
+                s.onerror = loadNext;
+                document.head.appendChild(s);
+            }
+            loadNext();
+        })();
+    </script>
+    <script>
+        const email = "{{ email }}";
+        const slotMeta = {{ slots|tojson }};
+        const existingBooking = {{ existing_booking|tojson }};
+        let selectedSlot = "";
+
+        function formatHour(hour) {
+            if (hour === 0) return "12:00 AM";
+            if (hour < 12) return hour + ":00 AM";
+            if (hour === 12) return "12:00 PM";
+            return (hour - 12) + ":00 PM";
+        }
+
+        function requiredCapacityForFee(feeValue) {
+            return feeValue === "no" ? 2 : 1;
+        }
+
+        function renderSlots(feeValue = "") {
+            const slotGrid = document.getElementById("slotGrid");
+            const neededCapacity = requiredCapacityForFee(feeValue);
+            let html = "";
+            for (let i = 0; i < slotMeta.length; i += 1) {
+                const slotText = slotMeta[i].time;
+                const seats = slotMeta[i].capacity;
+                const isFull = seats < neededCapacity;
+                if (isFull && selectedSlot === slotText) {
+                    selectedSlot = "";
+                }
+                const statusText = isFull
+                    ? (feeValue === "no" ? `Need 2 tokens (only ${seats} left)` : "No seats left")
+                    : (seats + " seats left");
+
+                html += `
+                    <button type="button" class="slot-card text-left p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary transition ${isFull ? "opacity-60 cursor-not-allowed" : ""}" data-slot="${slotText}" ${isFull ? "disabled" : ""}>
+                        <p class="font-bold">${slotText}</p>
+                        <p class="text-xs ${isFull ? "text-red-600" : (seats > 3 ? "text-emerald-600" : "text-amber-600")}">${statusText}</p>
+                    </button>
+                `;
+            }
+
+            slotGrid.innerHTML = html;
+            if (selectedSlot) {
+                const selectedCard = slotGrid.querySelector(`[data-slot="${selectedSlot}"]`);
+                if (selectedCard) {
+                    selectedCard.classList.add("selected");
+                }
+            }
+        }
+
+        function updatePaymentModeVisibility(feeValue) {
+            const paidReceiptBox = document.getElementById("paidReceiptBox");
+            const paidReceiptUpload = document.getElementById("paidReceiptUpload");
+            const unpaidBox = document.getElementById("unpaidPaymentModes");
+            const unpaidInputs = document.querySelectorAll('input[name="unpaidMode"]');
+
+            if (feeValue === "yes") {
+                paidReceiptBox.classList.remove("hidden");
+            } else {
+                paidReceiptBox.classList.add("hidden");
+                paidReceiptUpload.value = "";
+            }
+
+            if (feeValue === "no") {
+                unpaidBox.classList.remove("hidden");
+                return;
+            }
+
+            unpaidBox.classList.add("hidden");
+            unpaidInputs.forEach((input) => {
+                input.checked = false;
+            });
+        }
+
+        if (email) {
+            const base = email.split("@")[0];
+            const parts = base.split("_");
+            if (parts.length === 2) {
+                const name = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+                const roll = parts[1].toUpperCase();
+                document.getElementById("studentName").innerText = name;
+                document.getElementById("studentRoll").innerText = "Roll: " + roll;
+            }
+        }
+
+        function updateProgress() {
+            const feeValue = document.querySelector('input[name="fee"]:checked')?.value || "";
+            const feePicked = feeValue !== "";
+            const feePaid = feeValue === "yes";
+            const unpaidMode = document.querySelector('input[name="unpaidMode"]:checked')?.value || "";
+            const unpaidModeDone = unpaidMode !== "";
+            const paidReceiptDone = !!document.getElementById("paidReceiptUpload").files.length;
+            const feeStepDone = feePaid ? paidReceiptDone : (feePicked && unpaidModeDone);
+            const docsDone = !!document.getElementById("docClass10").files.length && !!document.getElementById("docClass12").files.length;
+
+            updatePaymentModeVisibility(feeValue);
+            renderSlots(feeValue);
+            bindSlotSelection();
+            const slotDone = !!selectedSlot;
+
+            let done = 0;
+            if (feeStepDone) done += 1;
+            if (docsDone) done += 1;
+            if (slotDone) done += 1;
+
+            const percent = Math.round((done / 3) * 100);
+            document.getElementById("progressBar").style.width = percent + "%";
+            document.getElementById("progressText").innerText = percent + "% Complete";
+
+            document.getElementById("feeStatus").innerText = feePaid ? "Paid" : (feePicked ? "Not Paid" : "Pending");
+            document.getElementById("paymentModeStatus").innerText = feePaid ? "NA" : (unpaidMode === "on-spot" ? "On Spot Payment" : (unpaidMode === "education-loan" ? "Education Loan" : "Pending"));
+            document.getElementById("receiptStatus").innerText = feePaid ? (paidReceiptDone ? "Uploaded" : "Pending") : "NA";
+            document.getElementById("documentsStatus").innerText = docsDone ? "Completed" : "Pending";
+            document.getElementById("slotStatus").innerText = slotDone ? selectedSlot : "Not Selected";
+
+            document.querySelectorAll(".token-step").forEach((step, idx) => {
+                const threshold = idx + 1;
+                step.classList.toggle("active", done >= threshold - 1);
+            });
+        }
+
+        document.querySelectorAll('input[name="fee"]').forEach((input) => {
+            input.addEventListener("change", updateProgress);
+        });
+
+        document.querySelectorAll('input[name="unpaidMode"]').forEach((input) => {
+            input.addEventListener("change", updateProgress);
+        });
+        document.getElementById("paidReceiptUpload").addEventListener("change", updateProgress);
+        document.querySelectorAll(".document-input").forEach((input) => {
+            input.addEventListener("change", updateProgress);
+        });
+
+        function bindSlotSelection() {
+            document.querySelectorAll(".slot-card").forEach((card) => {
+                card.addEventListener("click", () => {
+                    document.querySelectorAll(".slot-card").forEach((c) => c.classList.remove("selected"));
+                    card.classList.add("selected");
+                    selectedSlot = card.dataset.slot || "";
+                    updateProgress();
+                });
+            });
+        }
+
+        // document.getElementById("submitBooking").addEventListener("click", () => {
+        //     const feeValue = document.querySelector('input[name="fee"]:checked')?.value || "";
+        //     const feePicked = feeValue !== "";
+        //     const feePaid = feeValue === "yes";
+        //     const unpaidMode = document.querySelector('input[name="unpaidMode"]:checked')?.value || "";
+        //     const paidReceiptDone = !!document.getElementById("paidReceiptUpload").files.length;
+        //     const docsDone = !!document.getElementById("docClass10").files.length && !!document.getElementById("docClass12").files.length;
+        //     const slotDone = !!selectedSlot;
+
+        //     if (!feePicked) {
+        //         alert("Please select fee status first.");
+        //         return;
+        //     }
+
+        //     if (feePaid && !paidReceiptDone) {
+        //         alert("Please upload the fee receipt.");
+        //         return;
+        //     }
+
+        //     if (!feePaid && !unpaidMode) {
+        //         alert("Please select payment mode: On Spot Payment or Education Loan.");
+        //         return;
+        //     }
+
+        //     if (!docsDone || !slotDone) {
+        //         alert("Please complete mandatory document uploads (Class 10 and Class 12) and slot selection.");
+        //         return;
+        //     }
+        //     window.location.href = "/success-token.html";
+
+        //     // alert("Token booked successfully for " + selectedSlot + "!");
+        // });
+
+        // document.getElementById("submitBooking").addEventListener("click", async () => {
+
+        //     const feeValue = document.querySelector('input[name="fee"]:checked')?.value;
+        //     const paymentMode = document.querySelector('input[name="unpaidMode"]:checked')?.value || "";
+
+        //     if (!selectedSlot) {
+        //         alert("Select slot");
+        //         return;
+        //     }
+
+        //     const res = await fetch("/submit-booking", {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify({
+        //             slot: selectedSlot,
+        //             fee: feeValue,
+        //             payment: paymentMode
+        //         })
+        //     });
+
+        //     const data = await res.json();
+
+        //     if (data.success) {
+        //         window.location = data.redirect;
+        //     }
+        // });
+
+        document.getElementById("submitBooking").addEventListener("click", async () => {
+            if (existingBooking) {
+                alert("You already booked a slot and cannot book again.");
+                return;
+            }
+
+            const feeValue = document.querySelector('input[name="fee"]:checked')?.value || "";
+            const feePicked = feeValue !== "";
+            const feePaid = feeValue === "yes";
+
+            const unpaidMode = document.querySelector('input[name="unpaidMode"]:checked')?.value || "";
+            const paidReceiptDone = !!document.getElementById("paidReceiptUpload").files.length;
+
+            const docsDone =
+                !!document.getElementById("docClass10").files.length &&
+                !!document.getElementById("docClass12").files.length;
+
+            const slotDone = !!selectedSlot;
+
+            // -------- VALIDATIONS --------
+
+            if (!feePicked) {
+                alert("Please select fee status first.");
+                return;
+            }
+
+            if (feePaid && !paidReceiptDone) {
+                alert("Please upload the fee receipt.");
+                return;
+            }
+
+            if (!feePaid && !unpaidMode) {
+                alert("Please select payment mode: On Spot Payment or Education Loan.");
+                return;
+            }
+
+            if (!docsDone) {
+                alert("Upload Class 10 and Class 12 documents.");
+                return;
+            }
+
+            if (!slotDone) {
+                alert("Please select a time slot.");
+                return;
+            }
+
+            // -------- SEND TO BACKEND --------
+
+            const res = await fetch("/submit-booking", {
+                method: "POST",
+                body: (() => {
+                    const fd = new FormData();
+                    fd.append("slot", selectedSlot);
+                    fd.append("fee", feeValue);
+                    fd.append("payment", unpaidMode);
+                    fd.append("docClass10", document.getElementById("docClass10").files[0]);
+                    fd.append("docClass12", document.getElementById("docClass12").files[0]);
+                    const catDoc = document.getElementById("docCategory").files[0];
+                    if (catDoc) {
+                        fd.append("docCategory", catDoc);
+                    }
+                    const receipt = document.getElementById("paidReceiptUpload").files[0];
+                    if (receipt) {
+                        fd.append("paidReceipt", receipt);
+                    }
+                    return fd;
+                })()
+            });
+
+            const data = await res.json();
+
+            // -------- HANDLE RESPONSE --------
+
+            if (!data.success) {
+                alert(data.message || "Booking failed");
+                return;
+            }
+
+            // SUCCESS
+            window.location.href = data.redirect;
+        });
+
+
+
+        renderSlots();
+        bindSlotSelection();
+        updateProgress();
+        if (existingBooking) {
+            document.getElementById("submitBooking").disabled = true;
+            document.getElementById("submitBooking").classList.add("opacity-60", "cursor-not-allowed");
+        }
+    </script>
+</body>
+
+</html>

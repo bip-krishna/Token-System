@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>NITC Reporting - Login</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a242d",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem("nitc-theme");
+            // if (savedTheme === "dark" || savedTheme === "light") {
+            //     const isDark = savedTheme === "dark";
+            //     document.documentElement.classList.toggle("dark", isDark);
+            //     document.documentElement.classList.toggle("light", !isDark);
+            // }
+        })();
+    </script>
+</head>
+
+<body data-hide-logout="true"
+    class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col md:flex-row overflow-hidden">
+    <div class="hidden md:flex md:w-1/2 lg:w-5/12 bg-primary/10 relative flex-col justify-between overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img alt="University campus architecture at sunset" class="w-full h-full object-cover"
+                data-alt="University campus architecture at sunset"
+                src="https://nitc.ac.in/imgserver/uploads/compressed/pcm__3a8e2eea-ee33-4072-a6ee-6d6e15621c6a_0.png"/>
+            <div class="absolute inset-0 bg-primary/80 mix-blend-multiply"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+        </div>
+        <div class="relative z-10 p-12 h-full flex flex-col justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-primary shadow-lg">
+                    <span class="material-symbols-outlined text-2xl">school</span>
+                </div>
+                <h2 class="text-white text-2xl font-bold tracking-tight">NITC Reporting</h2>
+            </div>
+            <div class="space-y-6 max-w-md">
+                <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight">
+                    Streamlined Admission &amp; Reporting
+                </h1>
+                <p class="text-blue-100 text-lg leading-relaxed">
+                    Welcome to the digital gateway for NITC admissions. Efficient queue management and real-time
+                    reporting for students and administration.
+                </p>
+            </div>
+            <div class="text-blue-200 text-sm font-medium">
+                © 2026 National Institute of Technology Calicut
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 lg:p-24 overflow-y-auto bg-surface-light dark:bg-surface-dark relative">
+        <div class="absolute top-6 right-6 z-20" data-settings-mount></div>
+
+        <div class="md:hidden w-full mb-8 flex items-center gap-3">
+            <div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white">
+                <span class="material-symbols-outlined text-lg">school</span>
+            </div>
+            <span class="text-xl font-bold text-slate-900 dark:text-white">NITC Reporting</span>
+        </div>
+
+        <div class="w-full max-w-md space-y-8">
+            <div class="text-center md:text-left space-y-2">
+                <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Welcome</h2>
+                <p class="text-slate-500 dark:text-slate-400">Please enter your details to sign in.</p>
+            </div>
+
+            <div class="w-full">
+                <div class="grid grid-cols-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg mb-8 relative" role="tablist"
+                    aria-label="Login type">
+                    <div id="tab-indicator"
+                        class="absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] bg-white dark:bg-slate-700 shadow-sm rounded-md transition-all duration-300">
+                    </div>
+                    <button id="student-tab" data-tab="student"
+                        class="relative z-10 flex items-center justify-center py-2.5 text-sm font-semibold text-primary dark:text-primary transition-colors focus:outline-none"
+                        aria-selected="true" type="button">
+                        Student
+                    </button>
+                    <button id="admin-tab" data-tab="admin"
+                        class="relative z-10 flex items-center justify-center py-2.5 text-sm font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors focus:outline-none"
+                        aria-selected="false" type="button">
+                        Admin
+                    </button>
+                </div>
+
+                <form id="student-form" class="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="student-email">
+                            NITC Email ID
+                        </label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <span class="material-symbols-outlined text-[20px]">mail</span>
+                            </div>
+                            <input
+                                class="block w-full pl-10 pr-3 py-3 border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white bg-white dark:bg-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:border-transparent transition-all sm:text-sm"
+                                id="student-email" name="email" placeholder="b190000cs@nitc.ac.in" type="email" />
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300"
+                            for="student-password">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <span class="material-symbols-outlined text-[20px]">lock</span>
+                            </div>
+                            <input
+                                class="block w-full pl-10 pr-12 py-3 border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white bg-white dark:bg-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:border-transparent transition-all sm:text-sm"
+                                id="student-password" name="password" placeholder="••••••••" type="password" />
+                            <button type="button"
+                                class="password-toggle absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                                data-target="student-password" aria-label="Show password">
+                                <span class="material-symbols-outlined text-[20px]">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input
+                                class="h-4 w-4 text-primary border-slate-300 rounded focus:ring-primary bg-transparent"
+                                id="remember-me" name="remember-me" type="checkbox" />
+                            <label class="ml-2 block text-sm text-slate-600 dark:text-slate-400"
+                                for="remember-me">Remember me</label>
+                        </div>
+                        <div class="text-sm">
+                            <a class="font-medium text-primary hover:text-blue-600 transition-colors"
+                                href="forgot-password.html">Forgot password?</a>
+                        </div>
+                    </div>
+                    <button
+                        class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-primary hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all active:scale-[0.99]"
+                        type="submit">
+                        Login with NITC ID
+                    </button>
+                </form>
+
+                <form id="admin-form" class="space-y-5 hidden" aria-hidden="true">
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="admin-id">
+                            Admin ID
+                        </label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <span class="material-symbols-outlined text-[20px]">badge</span>
+                            </div>
+                            <input
+                                class="block w-full pl-10 pr-3 py-3 border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white bg-white dark:bg-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:border-transparent transition-all sm:text-sm"
+                                id="admin-id" name="admin-id" placeholder="Enter Admin ID" type="text" />
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300"
+                            for="admin-password">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <span class="material-symbols-outlined text-[20px]">lock</span>
+                            </div>
+                            <input
+                                class="block w-full pl-10 pr-12 py-3 border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white bg-white dark:bg-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-primary focus:border-transparent transition-all sm:text-sm"
+                                id="admin-password" name="password" placeholder="••••••••" type="password" />
+                            <button type="button"
+                                class="password-toggle absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                                data-target="admin-password" aria-label="Show password">
+                                <span class="material-symbols-outlined text-[20px]">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300" for="hall-role">
+                            Hall Role
+                        </label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <span class="material-symbols-outlined text-[20px]">meeting_room</span>
+                            </div>
+                            <select
+                                class="block w-full pl-10 pr-10 py-3 border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent transition-all sm:text-sm appearance-none"
+                                id="hall-role" name="hall-role">
+                                <option disabled="" selected="" value="">Select Hall</option>
+                                <option value="bhaskara">Bhaskara Hall</option>
+                                <option value="chanakya">Chanakya Hall</option>
+                            </select>
+                            <div
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-slate-400">
+                                <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <button
+                            class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-slate-900 dark:bg-slate-700 hover:bg-slate-800 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-all active:scale-[0.99]"
+                            type="submit">
+                            Login as Admin
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 text-center">
+                <p class="text-sm text-slate-500 dark:text-slate-400">
+                    Trouble logging in? <a class="font-medium text-primary hover:text-blue-600 transition-colors"
+                        href="#">Contact System Administrator</a>
+                </p>
+                <p class="text-xs text-slate-400 mt-2">
+                    Server control panel:
+                    <a class="font-medium text-primary hover:text-blue-600 transition-colors" href="/server-admin">Open Server Admin</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const studentTab = document.getElementById("student-tab");
+        const adminTab = document.getElementById("admin-tab");
+        const studentForm = document.getElementById("student-form");
+        const adminForm = document.getElementById("admin-form");
+        const indicator = document.getElementById("tab-indicator");
+
+        function setActiveTab(tabName) {
+            const isStudent = tabName === "student";
+
+            studentForm.classList.toggle("hidden", !isStudent);
+            adminForm.classList.toggle("hidden", isStudent);
+            adminForm.setAttribute("aria-hidden", String(isStudent));
+
+            studentTab.setAttribute("aria-selected", String(isStudent));
+            adminTab.setAttribute("aria-selected", String(!isStudent));
+
+            studentTab.classList.toggle("text-primary", isStudent);
+            studentTab.classList.toggle("dark:text-primary", isStudent);
+            studentTab.classList.toggle("text-slate-500", !isStudent);
+            studentTab.classList.toggle("dark:text-slate-400", !isStudent);
+
+            adminTab.classList.toggle("text-primary", !isStudent);
+            adminTab.classList.toggle("dark:text-primary", !isStudent);
+            adminTab.classList.toggle("text-slate-500", isStudent);
+            adminTab.classList.toggle("dark:text-slate-400", isStudent);
+
+            indicator.classList.toggle("translate-x-full", !isStudent);
+        }
+
+        studentTab.addEventListener("click", () => setActiveTab("student"));
+        adminTab.addEventListener("click", () => setActiveTab("admin"));
+    </script>
+    <script src="/static/site.js"></script>
+</body>
+
+</html>

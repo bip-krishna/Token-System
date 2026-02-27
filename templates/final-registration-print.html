@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Registration - {{ booking.token_id }}</title>
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #475569;
+      --line: #cbd5e1;
+      --accent: #0d59f2;
+      --paper: #ffffff;
+      --bg: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Arial", "Helvetica", sans-serif;
+      line-height: 1.4;
+    }
+
+    .toolbar {
+      max-width: 210mm;
+      margin: 16px auto 0;
+      padding: 0 12px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .sheet {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 10px auto 24px;
+      background: var(--paper);
+      padding: 14mm;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .meta {
+      text-align: right;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 3px 8px;
+      font-size: 10px;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .qr-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 6px;
+      width: 88px;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .qr-box img {
+      width: 74px;
+      height: 74px;
+      display: block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 16px;
+      margin: 12px 0;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .field {
+      margin: 0;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .value {
+      margin: 2px 0 0;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      word-break: break-word;
+    }
+
+    .section-title {
+      margin: 16px 0 8px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 4px;
+    }
+
+    .note-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 72px;
+      padding: 10px;
+      font-size: 12px;
+      color: var(--ink);
+      white-space: pre-wrap;
+    }
+
+    .declaration {
+      margin-top: 16px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .sign-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .sign {
+      border-top: 1px solid var(--ink);
+      padding-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 36px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .toolbar {
+        display: none;
+      }
+
+      .sheet {
+        margin: 0;
+        box-shadow: none;
+        width: auto;
+        min-height: auto;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button class="btn" type="button" onclick="window.close()">Close</button>
+    <button class="btn primary" type="button" onclick="window.print()">Print A4</button>
+  </div>
+
+  <section class="sheet">
+    <header class="header">
+      <div>
+        <h1 class="title">NITC Final Registration Slip</h1>
+        <p class="subtitle">National Institute of Technology Calicut - Physical Reporting</p>
+      </div>
+      <div class="header-right">
+        <div class="meta">
+          <div>Generated: {{ generated_at }}</div>
+          <div>Generated By: {{ generated_by }}</div>
+          <div class="badge">Token {{ booking.token_id }}</div>
+        </div>
+        <div class="qr-box">
+          <img id="printTokenQrImage" alt="Token QR"
+            src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data={{ booking.qr_payload|urlencode }}" />
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <p class="field">Student Name</p>
+        <p class="value">{{ booking.student_name }}</p>
+      </div>
+      <div class="card">
+        <p class="field">Roll Number</p>
+        <p class="value">{{ booking.roll_no }}</p>
+      </div>
+      <div class="card">
+        <p class="field">Student Email</p>
+        <p class="value">{{ booking.student_email }}</p>
+      </div>
+      <div class="card">
+        <p class="field">Reporting Slot</p>
+        <p class="value">{{ booking.slot_time }}</p>
+      </div>
+      <div class="card">
+        <p class="field">Fee Status</p>
+        <p class="value">{{ "Paid" if booking.fee_status == "yes" else "Not Paid" }}</p>
+      </div>
+      <div class="card">
+        <p class="field">Payment Mode</p>
+        <p class="value">{{ booking.payment_label }}</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Verification Notes</h2>
+    <div class="note-box">{{ booking.admin1_notes or "No notes provided by Admin 1." }}</div>
+
+    <h2 class="section-title">Document Checklist</h2>
+    <div class="grid">
+      <div class="card">
+        <p class="field">Class X Certificate</p>
+        <p class="value">{{ "Submitted" if booking.class10_doc_url else "Not Submitted" }}</p>
+      </div>
+      <div class="card">
+        <p class="field">Class XII Certificate</p>
+        <p class="value">{{ "Submitted" if booking.class12_doc_url else "Not Submitted" }}</p>
+      </div>
+      <div class="card">
+        <p class="field">Category Certificate</p>
+        <p class="value">{{ "Submitted" if booking.category_doc_url else "Not Submitted" }}</p>
+      </div>
+      <div class="card">
+        <p class="field">Fee Receipt</p>
+        <p class="value">{{ "Submitted" if booking.paid_receipt_doc_url else "Not Submitted" }}</p>
+      </div>
+    </div>
+
+    <div class="declaration">
+      This form confirms completion of final in-person registration verification at Chanakya Hall.
+      All entries are generated from the admission queue system records.
+    </div>
+
+    <div class="sign-grid">
+      <div class="sign">Student Signature</div>
+      <div class="sign">Admin 2 Signature</div>
+    </div>
+
+    <footer class="footer">
+      <span>Slip ID: FR-{{ booking.id }}-{{ booking.token_id }}</span>
+      <span>Page 1 of 1</span>
+    </footer>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script>
+    const printQrPayload = {{ booking.qr_payload|tojson }};
+    if (printQrPayload && window.QRCode && document.getElementById("printTokenQrImage")) {
+      QRCode.toDataURL(printQrPayload, { width: 180, margin: 1 }, function (err, url) {
+        if (!err) {
+          document.getElementById("printTokenQrImage").src = url;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

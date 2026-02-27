@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NITC - Late Reporting Pool</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          primary: "#0d7ff2",
+          "background-light": "#f5f7f8",
+          "background-dark": "#101922",
+        },
+        fontFamily: {
+          display: ["Lexend", "sans-serif"],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  body { font-family: 'Lexend', sans-serif; }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen">
+  <header class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-50">
+    <div class="max-w-[1280px] mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="p-2 rounded-lg bg-primary/10 text-primary">
+          <span class="material-symbols-outlined">schedule</span>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold">Late Reporting Pool</h1>
+          <p class="text-xs text-slate-500">Admissions exception queue</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="/admin2.html" class="px-4 py-2 rounded-lg border border-primary/30 text-primary text-sm font-semibold hover:bg-primary/5">Chanakya Desk</a>
+        <a href="/admin.html" class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-sm font-semibold">Bhaskara Desk</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[1280px] mx-auto px-4 sm:px-6 py-8 space-y-6">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+        <p class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Total Late Entries</p>
+        <p class="text-3xl font-black mt-1">{{ late_count }}</p>
+      </div>
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+        <p class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Latest Move</p>
+        <p class="text-sm font-bold mt-2">{{ latest_move_at }}</p>
+      </div>
+      <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+        <p class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Last Sync</p>
+        <p class="text-sm font-bold mt-2">Live</p>
+      </div>
+    </section>
+
+    <section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+        <h2 class="text-base font-bold">Students moved to late pool</h2>
+        <span class="text-xs text-slate-500 font-semibold">{{ late_entries|length }} records</span>
+      </div>
+      {% if late_entries %}
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+              <th class="py-3 px-5 text-xs font-bold uppercase tracking-wider text-slate-500">Student</th>
+              <th class="py-3 px-5 text-xs font-bold uppercase tracking-wider text-slate-500">Roll</th>
+              <th class="py-3 px-5 text-xs font-bold uppercase tracking-wider text-slate-500">Token</th>
+              <th class="py-3 px-5 text-xs font-bold uppercase tracking-wider text-slate-500">Slot</th>
+              <th class="py-3 px-5 text-xs font-bold uppercase tracking-wider text-slate-500">Reason</th>
+              <th class="py-3 px-5 text-xs font-bold uppercase tracking-wider text-slate-500">Moved At</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+            {% for entry in late_entries %}
+            <tr>
+              <td class="py-3 px-5 text-sm font-semibold">{{ entry.student_name }}</td>
+              <td class="py-3 px-5 text-sm text-slate-600 dark:text-slate-300">{{ entry.roll_no }}</td>
+              <td class="py-3 px-5 text-sm text-slate-600 dark:text-slate-300">{{ entry.token_id }}</td>
+              <td class="py-3 px-5 text-sm text-slate-600 dark:text-slate-300">{{ entry.slot_time }}</td>
+              <td class="py-3 px-5 text-sm text-slate-600 dark:text-slate-300">{{ entry.late_reporting_reason or '--' }}</td>
+              <td class="py-3 px-5 text-sm text-slate-500 dark:text-slate-400">{{ entry.moved_to_late_pool_at or '--' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="p-8 text-center text-slate-500 text-sm">No students in late reporting pool yet.</div>
+      {% endif %}
+    </section>
+  </main>
+
+  <script>
+    window.APP_CONFIG = { enableBackend: false, backendBaseUrl: "" };
+  </script>
+  <script src="{{ url_for('static', filename='site.js') }}"></script>
+</body>
+</html>

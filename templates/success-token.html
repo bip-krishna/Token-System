@@ -1,0 +1,682 @@
+<!-- <!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Token Confirmation &amp; Details | NITC</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+    <div class="layout-container flex flex-col min-h-screen">
+        <header
+            class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-6 py-4 lg:px-20 sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-primary/10 rounded-lg text-primary">
+                    <span class="material-symbols-outlined text-2xl">school</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight tracking-tight">NITC Admission Portal</h1>
+                    <p class="text-xs text-slate-500 font-medium">Academic Session {{ academic_session_label }}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Support</a>
+                </nav>
+                <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p id="studentNameTop" class="text-sm font-bold">Name</p>
+                        <p id="studentRollTop" class="text-[10px] text-slate-500">Roll: --</p>
+                    </div>
+                    <div
+                        class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 overflow-hidden">
+                        <img alt="Profile" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SxfTjZOVUNdbMr4heOy4VGSbXFfWG4wzZTFQA5fauLv8D0h3Sk3LxbSCbumqjHTeNm9cTn3l72tOAraC1jvywJ_BJj49-IWJ4hq8Q6rU2lFoVhyHkylh2LITDl14eFUSSJo6ME9aZnoKIwpWXSMMw8PEZ2_HshPTMIOWu-p4e0_JhtpJpr0RSrSR8v3Ca4QDxCwDQxkSy-9viQD_c4K_TSkDyPmfBSGraU1qxm7j6ZrLs5hK12R_EY69e5eocHXbJm4Ozay8GwZP" />
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 max-w-[1280px] mx-auto w-full px-4 py-8 lg:px-20">
+            <div class="text-center mb-10">
+                <div
+                    class="inline-flex items-center justify-center size-16 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-full mb-4">
+                    <span class="material-symbols-outlined text-4xl font-bold">check_circle</span>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-black tracking-tight mb-2">Token Booked Successfully!</h2>
+                <p class="text-slate-500">Please save this token. You will need to present the QR code at the reporting
+                    venue.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-6">
+                    <div
+                        class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4">
+                            <span
+                                class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">Quick
+                                Approval</span>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-10 items-center">
+                            <div class="flex-shrink-0">
+                                <div class="bg-white p-4 rounded-xl border-2 border-slate-100 shadow-md">
+                                    <img id="tokenQrImageTop" alt="Token QR Code" class="size-48 lg:size-56"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxj04MBSw-FYCfF8k-LJSkBCc-hmIuzHTKqxHm41_eLN_e6DA32v-Jr3G3HuuquDeSKnM1zB3dkLTnQwgglGNCQ7yeeYJi9HEtRJzZJ8QHasPBtAG7rIZoCOBsBPvzCGyjWLhvULp8N3MFfuVCH4gzvhafklmbr-N1cVbEjrGj5EB0pz3GGGZVDrqJ7oJyz1O7S9Lv7UUOj54j2MiHnUSVfnkPwH1B4qoM-XrUnSp6mhK0LTeTulV23XveW-t9ZEiVA-HIA_wH9c36" />
+                                </div>
+                                <p
+                                    class="text-center mt-4 font-mono text-xl font-bold tracking-widest text-slate-800 dark:text-slate-200">
+                                    {{ booking.token }}</p>
+                            </div>
+                            <div class="flex-1 space-y-6 w-full">
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">
+                                            Reporting Time</p>
+                                        <p class="text-lg font-bold text-primary">{{ booking.slot }}</p>
+                                        <p class="text-xs text-slate-500">As per booked slot</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">
+                                            Venue</p>
+                                        <p class="text-lg font-bold">Chanakya Hall</p>
+                                        <p class="text-xs text-slate-500">First Floor, Admin Block B</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">
+                                            Student Name</p>
+                                        <p class="font-bold"><span id="studentNameCardTop"></span></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">
+                                            Branch</p>
+                                        <p class="font-bold"><span id="studentBranchTop"></span></p>
+                                    </div>
+                                </div>
+                                <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                                    <div class="flex flex-wrap gap-3">
+                                        <button
+                                            class="flex-1 min-w-[160px] bg-primary hover:bg-primary/90 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+                                            <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
+                                            Download PDF
+                                        </button>
+                                        <button
+                                            class="flex-1 min-w-[160px] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+                                            <span class="material-symbols-outlined text-xl">calendar_add_on</span>
+                                            Add to Calendar
+                                        </button>
+                                    </div>
+                                    <a class="w-full bg-white dark:bg-slate-900 border-2 border-primary/20 hover:border-primary/50 text-primary font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all group"
+                                        href="#">
+                                        <span
+                                            class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">monitoring</span>
+                                        View Live Queue Status
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-gradient-to-r from-primary/5 to-transparent border border-primary/20 p-5 rounded-2xl flex items-center justify-between group cursor-pointer hover:bg-primary/10 transition-colors">
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <div class="size-12 rounded-xl bg-primary text-white flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-2xl">pending_actions</span>
+                                </div>
+                                <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                                    <span
+                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                </span>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Now Serving
+                                </p>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-2xl font-black text-slate-900 dark:text-white">{{ booking.token }}</span>
+                                    <span class="text-xs text-primary font-bold">{{ queue_stats.students_ahead }} token(s) ahead</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                            Track Real-time
+                            <span class="material-symbols-outlined text-lg">chevron_right</span>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 p-4 rounded-xl flex gap-4">
+                        <span class="material-symbols-outlined text-amber-500">info</span>
+                        <p class="text-sm text-amber-800 dark:text-amber-400">
+                            Please arrive at least 15 minutes before your time slot. Late arrival might result in token
+                            expiration and requires re-booking for the next available slot.
+                        </p>
+                    </div>
+                </div>
+                <div class="lg:col-span-5 space-y-6">
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+                        <div
+                            class="bg-slate-50 dark:bg-slate-800/50 px-6 py-4 border-b border-slate-200 dark:border-slate-800">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary">description</span>
+                                    Required Documents
+                                </h3>
+                                <span
+                                    class="px-2 py-0.5 bg-primary/10 text-[10px] rounded font-bold text-primary">CATEGORY
+                                    X</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="space-y-4">
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Original JEE Main Admit Card</p>
+                                        <p class="text-xs text-slate-500">Must be the same copy used during exam</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Class X &amp; XII Marksheets</p>
+                                        <p class="text-xs text-slate-500">Originals + 2 Attested Photocopies</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Seat Allotment Letter</p>
+                                        <p class="text-xs text-slate-500">Downloaded from JoSAA/CSAB portal</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Transfer &amp; Migration Certificate</p>
+                                        <p class="text-xs text-slate-500">From last attended institution</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Aadhar Card</p>
+                                        <p class="text-xs text-slate-500">For biometric verification</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="relative h-48 w-full">
+                            <img alt="NITC Chanakya Hall" class="w-full h-full object-cover"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIRQI_czQrMNyjzuKy_slq2VRKEHrl_hPuDgXJUXhglHroBGmEEyOaGYKj1XIIFX4-kfEguO08D2bnW-OZPsq_vIVozkgnx_mr8G_4eiadNiVOMIBh8XR6BiBreop33o_dCMm0hF2Nqckcfhv_Xc_PKXUDQ9Rr6VO1RN8NEPFimCZcOPWFZYH9QwHexSzZVF4ydlejp9hhPHXunzbNOgAezjwHxPhGdzO9jftizjGuXrtmZQEaHk4aM1zEGNDDdaM_4lC8p8HMLPPn" />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent">
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                                <div>
+                                    <p class="text-white text-[10px] font-bold uppercase tracking-widest mb-1">Venue
+                                        Location</p>
+                                    <p class="text-white font-bold text-lg">Chanakya Hall</p>
+                                    <p class="text-white/70 text-xs">Administrative Block, First Floor</p>
+                                </div>
+                                <a class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-2 rounded-lg transition-colors border border-white/20"
+                                    href="#">
+                                    <span class="material-symbols-outlined">directions</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer
+            class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 py-8 px-6 lg:px-20 mt-12">
+            <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex flex-col items-center md:items-start">
+                    <p class="text-sm font-bold opacity-80">NIT Calicut Admissions Office</p>
+                    <p class="text-xs text-slate-500">© {{ current_year }} National Institute of Technology Calicut. All Rights
+                        Reserved.</p>
+                </div>
+                <div class="flex gap-8">
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium"
+                        href="#">Emergency Contact</a>
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium" href="#">Campus
+                        Map</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Powered By</span>
+                    <div class="px-2 py-1 bg-slate-900 rounded text-[10px] font-black text-white">IMS NITC</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+
+
+</body>
+
+</html> -->
+
+
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Token Confirmation &amp; Details | NITC</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Lexend', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+    <div class="layout-container flex flex-col min-h-screen">
+        <header
+            class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-6 py-4 lg:px-20 sticky top-0 z-50">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-primary/10 rounded-lg text-primary">
+                    <span class="material-symbols-outlined text-2xl">school</span>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold leading-tight tracking-tight">NITC Admission Portal</h1>
+                    <p class="text-xs text-slate-500 font-medium">Academic Session {{ academic_session_label }}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="student.html">Dashboard</a>
+                    <a class="text-sm font-medium hover:text-primary transition-colors" href="micellaneous/helpdesk.html">Support</a>
+                </nav>
+                <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p id="studentName" class="text-sm font-bold">Name</p>
+                        <p id="studentRoll" class="text-[10px] text-slate-500">Roll: --</p>
+                    </div>
+
+                    <div
+                        class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 overflow-hidden">
+                        <img alt="Profile" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SxfTjZOVUNdbMr4heOy4VGSbXFfWG4wzZTFQA5fauLv8D0h3Sk3LxbSCbumqjHTeNm9cTn3l72tOAraC1jvywJ_BJj49-IWJ4hq8Q6rU2lFoVhyHkylh2LITDl14eFUSSJo6ME9aZnoKIwpWXSMMw8PEZ2_HshPTMIOWu-p4e0_JhtpJpr0RSrSR8v3Ca4QDxCwDQxkSy-9viQD_c4K_TSkDyPmfBSGraU1qxm7j6ZrLs5hK12R_EY69e5eocHXbJm4Ozay8GwZP" />
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 max-w-[1280px] mx-auto w-full px-4 py-8 lg:px-20">
+            <div class="text-center mb-10">
+                <div
+                    class="inline-flex items-center justify-center size-16 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 rounded-full mb-4">
+                    <span class="material-symbols-outlined text-4xl font-bold">check_circle</span>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-black tracking-tight mb-2">Token Booked Successfully!</h2>
+                <p class="text-slate-500">Please save this token. You will need to present the QR code at the reporting
+                    venue.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-6">
+                    <div
+                        class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4">
+                            <span
+                                class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">Quick
+                                Approval</span>
+                        </div>
+                        <div class="flex flex-col md:flex-row gap-10 items-center">
+                            <div class="flex-shrink-0">
+                                <div class="bg-white p-4 rounded-xl border-2 border-slate-100 shadow-md">
+                                    <img id="tokenQrImage" alt="Token QR Code" class="size-48 lg:size-56"
+                                        src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data={{ (booking.qr_payload or booking.token)|urlencode }}" />
+                                </div>
+                                <p
+                                    class="text-center mt-4 font-mono text-xl font-bold tracking-widest text-slate-800 dark:text-slate-200">
+                                    {{ booking.token }}</p>
+                            </div>
+                            <div class="flex-1 space-y-6 w-full">
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">
+                                            Reporting Time</p>
+                                        <p class="text-lg font-bold text-primary">{{ booking.slot }}</p>
+                                        <p class="text-xs text-slate-500">As per booked slot</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">
+                                            Venue</p>
+                                        <p class="text-lg font-bold">Chanakya Hall</p>
+                                        <p class="text-xs text-slate-500">First Floor, Admin Block B</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">
+                                            Student Name</p>
+                                        <p class="font-bold"><span id="studentNameCard"></span></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">
+                                            Branch</p>
+                                        <p class="font-bold"><span id="studentBranch"></span></p>
+                                    </div>
+                                </div>
+                                <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                                    <div class="flex flex-wrap gap-3">
+                                        <!-- <button
+                                            class="flex-1 min-w-[160px] bg-primary hover:bg-primary/90 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+                                            <span class="material-symbols-outlined text-xl">picture_as_pdf</span>
+                                            Download PDF
+                                        </button> -->
+                                        <button
+                                            class="flex-1 min-w-[160px] bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+                                            <span class="material-symbols-outlined text-xl">calendar_add_on</span>
+                                            Add to Calendar
+                                        </button>
+                                    </div>
+                                    <a class="w-full bg-white dark:bg-slate-900 border-2 border-primary/20 hover:border-primary/50 text-primary font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all group"
+                                        href="livestatus.html">
+                                        <span
+                                            class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">monitoring</span>
+                                        View Live Queue Status
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-gradient-to-r from-primary/5 to-transparent border border-primary/20 p-5 rounded-2xl flex items-center justify-between group cursor-pointer hover:bg-primary/10 transition-colors">
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <div class="size-12 rounded-xl bg-primary text-white flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-2xl">pending_actions</span>
+                                </div>
+                                <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                                    <span
+                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                </span>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Now Serving
+                                </p>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-2xl font-black text-slate-900 dark:text-white">{{ booking.token
+                                        }}</span>
+                                    <span class="text-xs text-primary font-bold">{{ queue_stats.students_ahead }} token(s) ahead</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-primary font-bold text-sm">
+                            Track Real-time
+                            <span class="material-symbols-outlined text-lg">chevron_right</span>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 p-4 rounded-xl flex gap-4">
+                        <span class="material-symbols-outlined text-amber-500">info</span>
+                        <p class="text-sm text-amber-800 dark:text-amber-400">
+                            Please arrive at least 15 minutes before your time slot. Late arrival might result in token
+                            expiration and requires re-booking for the next available slot.
+                        </p>
+                    </div>
+                </div>
+                <div class="lg:col-span-5 space-y-6">
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+                        <div
+                            class="bg-slate-50 dark:bg-slate-800/50 px-6 py-4 border-b border-slate-200 dark:border-slate-800">
+                            <div class="flex items-center justify-between">
+                                <h3 class="font-bold flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-primary">description</span>
+                                    Required Documents
+                                </h3>
+                                <span
+                                    class="px-2 py-0.5 bg-primary/10 text-[10px] rounded font-bold text-primary">CATEGORY
+                                    X</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <ul class="space-y-4">
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Original JEE Main Admit Card</p>
+                                        <p class="text-xs text-slate-500">Must be the same copy used during exam</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Class X &amp; XII Marksheets</p>
+                                        <p class="text-xs text-slate-500">Originals + 2 Attested Photocopies</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Seat Allotment Letter</p>
+                                        <p class="text-xs text-slate-500">Downloaded from JoSAA/CSAB portal</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Transfer &amp; Migration Certificate</p>
+                                        <p class="text-xs text-slate-500">From last attended institution</p>
+                                    </div>
+                                </li>
+                                <li class="flex gap-3">
+                                    <div
+                                        class="size-6 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold">Aadhar Card</p>
+                                        <p class="text-xs text-slate-500">For biometric verification</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="relative h-48 w-full">
+                            <img alt="NITC Chanakya Hall" class="w-full h-full object-cover"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIRQI_czQrMNyjzuKy_slq2VRKEHrl_hPuDgXJUXhglHroBGmEEyOaGYKj1XIIFX4-kfEguO08D2bnW-OZPsq_vIVozkgnx_mr8G_4eiadNiVOMIBh8XR6BiBreop33o_dCMm0hF2Nqckcfhv_Xc_PKXUDQ9Rr6VO1RN8NEPFimCZcOPWFZYH9QwHexSzZVF4ydlejp9hhPHXunzbNOgAezjwHxPhGdzO9jftizjGuXrtmZQEaHk4aM1zEGNDDdaM_4lC8p8HMLPPn" />
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent">
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                                <div>
+                                    <p class="text-white text-[10px] font-bold uppercase tracking-widest mb-1">Venue
+                                        Location</p>
+                                    <p class="text-white font-bold text-lg">Chanakya Hall</p>
+                                    <p class="text-white/70 text-xs">Administrative Block, First Floor</p>
+                                </div>
+                                <a class="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-2 rounded-lg transition-colors border border-white/20"
+                                    href="#">
+                                    <span class="material-symbols-outlined">directions</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer
+            class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 py-8 px-6 lg:px-20 mt-12">
+            <div class="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex flex-col items-center md:items-start">
+                    <p class="text-sm font-bold opacity-80">NIT Calicut Admissions Office</p>
+                    <p class="text-xs text-slate-500">© {{ current_year }} National Institute of Technology Calicut. All Rights
+                        Reserved.</p>
+                </div>
+                <div class="flex gap-8">
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium"
+                        href="#">Emergency Contact</a>
+                    <a class="text-xs text-slate-500 hover:text-primary transition-colors font-medium" href="#">Campus
+                        Map</a>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Powered By</span>
+                    <div class="px-2 py-1 bg-slate-900 rounded text-[10px] font-black text-white">IMS NITC</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <!-- <script src="/static/site.js"></script> -->
+    <script src="{{ url_for('static', filename='site.js') }}"></script>
+    <script>
+        const email = "{{ email }}";
+        const qrPayload = {{ (booking.qr_payload or booking.token)|default('', true)|tojson }};
+
+        if (email) {
+
+            let base = email.split("@")[0];
+            let parts = base.split("_");
+
+            if (parts.length === 2) {
+
+                let name = parts[0];
+                let roll = parts[1];
+
+                name = name.charAt(0).toUpperCase() + name.slice(1);
+                roll = roll.toUpperCase();
+
+                document.getElementById("studentName").innerText = name;
+                document.getElementById("studentRoll").innerText = "Roll: " + roll;
+                if (document.getElementById("studentNameTop")) {
+                    document.getElementById("studentNameTop").innerText = name;
+                }
+                if (document.getElementById("studentRollTop")) {
+                    document.getElementById("studentRollTop").innerText = "Roll: " + roll;
+                }
+
+                document.getElementById("studentNameCard").innerText = name;
+                if (document.getElementById("studentNameCardTop")) {
+                    document.getElementById("studentNameCardTop").innerText = name;
+                }
+
+                // simple branch detection
+                let branch = "Engineering";
+                if (roll.includes("CS")) branch = "Computer Science";
+                if (roll.includes("EC")) branch = "Electronics";
+
+                document.getElementById("studentBranch").innerText = branch;
+                if (document.getElementById("studentBranchTop")) {
+                    document.getElementById("studentBranchTop").innerText = branch;
+                }
+            }
+        }
+
+        if (qrPayload && window.QRCode && document.getElementById("tokenQrImage")) {
+            QRCode.toDataURL(qrPayload, { width: 240, margin: 2 }, function (err, url) {
+                if (!err) {
+                    document.getElementById("tokenQrImage").src = url;
+                    if (document.getElementById("tokenQrImageTop")) {
+                        document.getElementById("tokenQrImageTop").src = url;
+                    }
+                }
+            });
+        }
+
+    </script>
+
+
+</body>
+
+</html>
